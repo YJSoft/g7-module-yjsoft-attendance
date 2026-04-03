@@ -2,6 +2,7 @@
 
 return [
     'attend_success'         => '출석이 완료되었습니다.',
+    'attend_failed'          => '출석 처리 중 오류가 발생했습니다.',
     'already_attended'       => '오늘 이미 출석하셨습니다.',
     'time_not_allowed'       => '현재 출석 가능 시간이 아닙니다.',
     'settings_saved'         => '설정이 저장되었습니다.',

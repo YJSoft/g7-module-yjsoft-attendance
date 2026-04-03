@@ -2,6 +2,7 @@
 
 return [
     'attend_success'         => 'Attendance has been recorded.',
+    'attend_failed'          => 'An error occurred while processing attendance.',
     'already_attended'       => 'You have already checked in today.',
     'time_not_allowed'       => 'Attendance is not available at this time.',
     'settings_saved'         => 'Settings have been saved.',
