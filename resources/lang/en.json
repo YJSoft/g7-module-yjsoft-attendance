@@ -3,12 +3,22 @@
     "title": "Attendance",
     "attend_btn": "Check In",
     "greeting_placeholder": "Enter your greeting",
-    "already_done": "Already Checked In",
+    "already_done": "Checked In",
     "current_time": "Current Time",
+    "attend_success": "Attendance completed!",
+    "attend_done_message": "You have already checked in today. Attendance is limited to once per day.",
     "calendar": {
       "title": "Attendance Calendar",
       "attended": "Present",
-      "absent": "Absent"
+      "absent": "Absent",
+      "future": "Not Yet",
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
     },
     "streak": {
       "weekly": "Weekly Streak",
@@ -16,22 +26,53 @@
       "yearly": "Yearly Streak"
     },
     "rank": {
-      "title": "Attendance Ranking",
+      "title": "Today's Attendance",
       "first": "1st",
       "second": "2nd",
-      "third": "3rd"
+      "third": "3rd",
+      "today_rank": "Today's Rank"
     },
     "detail": {
       "title": "Details",
-      "base_point": "Base Points",
+      "base_point": "Attendance Points",
       "streak_point": "Streak Points",
       "rank_point": "Rank Points",
       "random_point": "Random Points",
-      "total_point": "Total Points"
+      "total_point": "Total Points",
+      "streak_detail_btn": "Streak Details",
+      "rank_detail_btn": "Rank Details",
+      "achieved": "Achieved",
+      "current_streak": "Currently on a {days}-day streak"
+    },
+    "status": {
+      "progress": "Status",
+      "available": "Available",
+      "closed": "Closed",
+      "attended": "Attendance",
+      "not_attended": "Not Attended",
+      "permission": "Permission",
+      "logged_in_user": "Logged In User"
+    },
+    "list": {
+      "rank": "Rank",
+      "time": "Time",
+      "greeting": "Greeting",
+      "nickname": "Nickname",
+      "point": "Points",
+      "random_point": "Random",
+      "streak": "Streak",
+      "total_days": "Total Days"
+    },
+    "handler": {
+      "clock_start_failed": "Failed to start the clock."
     }
   },
   "skin": {
-    "title": "Skin Management"
+    "title": "Skin Management",
+    "current_skin": "Current Skin",
+    "default_skin_name": "Default Skin",
+    "default_skin_description": "Default skin for the attendance module.",
+    "custom_skin_notice": "Custom skin upload will be available in a future version."
   },
   "settings": {
     "title": "Attendance Settings",

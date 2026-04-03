@@ -1,0 +1,1318 @@
+{
+  "layout_name": "user_attendance_index",
+  "version": "1.0.0",
+  "extends": "_user_base",
+  "meta": {
+    "title": "$t:yjsoft-attendance.attendance.title",
+    "auth_required": true
+  },
+  "data_sources": [
+    {
+      "id": "attendance_status",
+      "type": "api",
+      "method": "GET",
+      "endpoint": "/api/modules/yjsoft-attendance/auth/status",
+      "auto_fetch": true,
+      "auth_required": true,
+      "params": {
+        "month": "{{route.month ?? ''}}"
+      }
+    },
+    {
+      "id": "attendance_list",
+      "type": "api",
+      "method": "GET",
+      "endpoint": "/api/modules/yjsoft-attendance/auth/list",
+      "auto_fetch": true,
+      "auth_required": true,
+      "params": {
+        "page": "{{route.page ?? 1}}",
+        "per_page": 20
+      }
+    },
+    {
+      "id": "attendance_settings",
+      "type": "api",
+      "method": "GET",
+      "endpoint": "/api/modules/yjsoft-attendance/auth/settings",
+      "auto_fetch": true,
+      "auth_required": true
+    }
+  ],
+  "state": {
+    "greeting": "",
+    "isSubmitting": false,
+    "showStreakDetail": false,
+    "showRankDetail": false,
+    "showAccessDetail": false,
+    "currentMonth": "{{route.month ?? ''}}",
+    "currentPage": 1,
+    "currentTime": ""
+  },
+  "init_actions": [
+    {
+      "handler": "yjsoft-attendance.startClock"
+    },
+    {
+      "handler": "yjsoft-attendance.initRandomGreeting",
+      "params": {
+        "greetings": "{{attendance_settings?.data?.greetings?.list ?? []}}"
+      }
+    }
+  ],
+  "slots": {
+    "content": [
+      {
+        "id": "attendance_page_wrapper",
+        "name": "Div",
+        "type": "basic",
+        "props": {
+          "className": "max-w-4xl mx-auto px-4 py-6"
+        },
+        "children": [
+          {
+            "id": "page_header_section",
+            "name": "Div",
+            "type": "basic",
+            "props": {
+              "className": "flex items-center justify-between mb-6"
+            },
+            "children": [
+              {
+                "id": "page_title",
+                "name": "H2",
+                "type": "basic",
+                "props": {
+                  "className": "text-2xl font-bold text-gray-800 dark:text-gray-100"
+                },
+                "children": [
+                  {
+                    "id": "page_title_text",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.title"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "clock_display",
+                "name": "Span",
+                "type": "basic",
+                "props": {
+                  "text": "{{_local.currentTime ?? ''}}",
+                  "className": "font-mono text-sm bg-blue-600 text-white px-3 py-1 rounded dark:bg-blue-700"
+                }
+              }
+            ]
+          },
+          {
+            "id": "status_header_section",
+            "name": "Div",
+            "type": "basic",
+            "props": {
+              "className": "grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
+            },
+            "children": [
+              {
+                "id": "stat_total_count",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 text-center"
+                },
+                "children": [
+                  {
+                    "id": "stat_total_count_label",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.detail.base_point",
+                      "className": "block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                    }
+                  },
+                  {
+                    "id": "stat_total_count_value",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "{{attendance_status?.data?.total_count ?? 0}}",
+                      "className": "block text-xl font-bold text-blue-600 dark:text-blue-400"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "stat_progress",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 text-center"
+                },
+                "children": [
+                  {
+                    "id": "stat_progress_label",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.status.progress",
+                      "className": "block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                    }
+                  },
+                  {
+                    "id": "stat_progress_available",
+                    "name": "Span",
+                    "type": "basic",
+                    "if": "{{attendance_status?.data?.can_attend}}",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.status.available",
+                      "className": "inline-block text-sm font-semibold bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 px-2 py-0.5 rounded"
+                    }
+                  },
+                  {
+                    "id": "stat_progress_closed",
+                    "name": "Span",
+                    "type": "basic",
+                    "if": "{{!attendance_status?.data?.can_attend}}",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.status.closed",
+                      "className": "inline-block text-sm font-semibold bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300 px-2 py-0.5 rounded"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "stat_attended",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 text-center"
+                },
+                "children": [
+                  {
+                    "id": "stat_attended_label",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.status.attended",
+                      "className": "block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                    }
+                  },
+                  {
+                    "id": "stat_attended_done",
+                    "name": "Span",
+                    "type": "basic",
+                    "if": "{{attendance_status?.data?.is_attended_today}}",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.already_done",
+                      "className": "inline-block text-sm font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded"
+                    }
+                  },
+                  {
+                    "id": "stat_attended_not",
+                    "name": "Span",
+                    "type": "basic",
+                    "if": "{{!attendance_status?.data?.is_attended_today}}",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.status.not_attended",
+                      "className": "inline-block text-sm font-semibold bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-0.5 rounded"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "stat_permission",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 text-center"
+                },
+                "children": [
+                  {
+                    "id": "stat_permission_label",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.status.permission",
+                      "className": "block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                    }
+                  },
+                  {
+                    "id": "stat_permission_value",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.status.logged_in_user",
+                      "className": "inline-block text-sm font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 px-2 py-0.5 rounded"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "detail_buttons_section",
+            "name": "Div",
+            "type": "basic",
+            "props": {
+              "className": "flex flex-wrap gap-2 mb-4"
+            },
+            "children": [
+              {
+                "id": "streak_detail_btn",
+                "name": "Button",
+                "type": "basic",
+                "props": {
+                  "text": "$t:yjsoft-attendance.attendance.detail.streak_detail_btn",
+                  "type": "button",
+                  "className": "text-sm text-blue-600 underline dark:text-blue-400 bg-transparent border-0 cursor-pointer"
+                },
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "setState",
+                    "params": {
+                      "target": "local",
+                      "showStreakDetail": "{{!_local.showStreakDetail}}"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "rank_detail_btn",
+                "name": "Button",
+                "type": "basic",
+                "props": {
+                  "text": "$t:yjsoft-attendance.attendance.detail.rank_detail_btn",
+                  "type": "button",
+                  "className": "text-sm text-blue-600 underline dark:text-blue-400 bg-transparent border-0 cursor-pointer"
+                },
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "setState",
+                    "params": {
+                      "target": "local",
+                      "showRankDetail": "{{!_local.showRankDetail}}"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "streak_detail_panel",
+            "name": "Div",
+            "type": "basic",
+            "if": "{{_local.showStreakDetail}}",
+            "props": {
+              "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 mb-4"
+            },
+            "children": [
+              {
+                "id": "streak_detail_title",
+                "name": "H3",
+                "type": "basic",
+                "props": {
+                  "className": "text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100"
+                },
+                "children": [
+                  {
+                    "id": "streak_detail_title_text",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.detail.streak_point"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "streak_detail_grid",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "grid grid-cols-3 gap-4"
+                },
+                "children": [
+                  {
+                    "id": "streak_weekly",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "text-center"
+                    },
+                    "children": [
+                      {
+                        "id": "streak_weekly_label",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.streak.weekly",
+                          "className": "block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                        }
+                      },
+                      {
+                        "id": "streak_weekly_value",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "{{attendance_status?.data?.streaks?.weekly?.current ?? 0}} / {{attendance_status?.data?.streaks?.weekly?.required ?? 0}}",
+                          "className": "block text-sm font-semibold text-gray-800 dark:text-gray-200"
+                        }
+                      },
+                      {
+                        "id": "streak_weekly_achieved",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{attendance_status?.data?.streaks?.weekly?.achieved}}",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.detail.achieved",
+                          "className": "inline-block text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 px-1.5 py-0.5 rounded mt-1"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "streak_monthly",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "text-center"
+                    },
+                    "children": [
+                      {
+                        "id": "streak_monthly_label",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.streak.monthly",
+                          "className": "block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                        }
+                      },
+                      {
+                        "id": "streak_monthly_value",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "{{attendance_status?.data?.streaks?.monthly?.current ?? 0}} / {{attendance_status?.data?.streaks?.monthly?.required ?? 0}}",
+                          "className": "block text-sm font-semibold text-gray-800 dark:text-gray-200"
+                        }
+                      },
+                      {
+                        "id": "streak_monthly_achieved",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{attendance_status?.data?.streaks?.monthly?.achieved}}",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.detail.achieved",
+                          "className": "inline-block text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 px-1.5 py-0.5 rounded mt-1"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "streak_yearly",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "text-center"
+                    },
+                    "children": [
+                      {
+                        "id": "streak_yearly_label",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.streak.yearly",
+                          "className": "block text-xs text-gray-500 dark:text-gray-400 mb-1"
+                        }
+                      },
+                      {
+                        "id": "streak_yearly_value",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "{{attendance_status?.data?.streaks?.yearly?.current ?? 0}} / {{attendance_status?.data?.streaks?.yearly?.required ?? 0}}",
+                          "className": "block text-sm font-semibold text-gray-800 dark:text-gray-200"
+                        }
+                      },
+                      {
+                        "id": "streak_yearly_achieved",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{attendance_status?.data?.streaks?.yearly?.achieved}}",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.detail.achieved",
+                          "className": "inline-block text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 px-1.5 py-0.5 rounded mt-1"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "streak_current_info",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "mt-3 text-sm text-gray-600 dark:text-gray-400 text-center"
+                },
+                "children": [
+                  {
+                    "id": "streak_current_text",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.detail.current_streak|days={{attendance_status?.data?.current_streak ?? 0}}"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "rank_detail_panel",
+            "name": "Div",
+            "type": "basic",
+            "if": "{{_local.showRankDetail}}",
+            "props": {
+              "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 mb-4"
+            },
+            "children": [
+              {
+                "id": "rank_detail_title",
+                "name": "H3",
+                "type": "basic",
+                "props": {
+                  "className": "text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100"
+                },
+                "children": [
+                  {
+                    "id": "rank_detail_title_text",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.detail.rank_point"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "rank_detail_info",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "space-y-2"
+                },
+                "children": [
+                  {
+                    "id": "rank_today",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "flex justify-between text-sm"
+                    },
+                    "children": [
+                      {
+                        "id": "rank_today_label",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.rank.today_rank",
+                          "className": "text-gray-500 dark:text-gray-400"
+                        }
+                      },
+                      {
+                        "id": "rank_today_value",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "{{attendance_status?.data?.today_rank ?? '-'}}",
+                          "className": "font-semibold text-gray-800 dark:text-gray-200"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "rank_bonus_1",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "flex justify-between text-sm"
+                    },
+                    "children": [
+                      {
+                        "id": "rank_bonus_1_label",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.rank.first",
+                          "className": "text-gray-500 dark:text-gray-400"
+                        }
+                      },
+                      {
+                        "id": "rank_bonus_1_value",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "{{attendance_status?.data?.rank_bonus?.rank1 ?? 0}} P",
+                          "className": "font-semibold text-gray-800 dark:text-gray-200"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "rank_bonus_2",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "flex justify-between text-sm"
+                    },
+                    "children": [
+                      {
+                        "id": "rank_bonus_2_label",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.rank.second",
+                          "className": "text-gray-500 dark:text-gray-400"
+                        }
+                      },
+                      {
+                        "id": "rank_bonus_2_value",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "{{attendance_status?.data?.rank_bonus?.rank2 ?? 0}} P",
+                          "className": "font-semibold text-gray-800 dark:text-gray-200"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "rank_bonus_3",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "flex justify-between text-sm"
+                    },
+                    "children": [
+                      {
+                        "id": "rank_bonus_3_label",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.rank.third",
+                          "className": "text-gray-500 dark:text-gray-400"
+                        }
+                      },
+                      {
+                        "id": "rank_bonus_3_value",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "{{attendance_status?.data?.rank_bonus?.rank3 ?? 0}} P",
+                          "className": "font-semibold text-gray-800 dark:text-gray-200"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "calendar_section",
+            "name": "Div",
+            "type": "basic",
+            "props": {
+              "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 mb-6"
+            },
+            "children": [
+              {
+                "id": "calendar_header",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "flex items-center justify-between mb-4"
+                },
+                "children": [
+                  {
+                    "id": "calendar_prev_btn",
+                    "name": "Button",
+                    "type": "basic",
+                    "props": {
+                      "text": "◀",
+                      "type": "button",
+                      "className": "px-3 py-1 text-sm rounded bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200"
+                    },
+                    "actions": [
+                      {
+                        "type": "click",
+                        "handler": "navigate",
+                        "params": {
+                          "path": "{{attendance_status?.data?.monthly_records?.prev_month_url ?? ''}}",
+                          "mergeQuery": true
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "calendar_title",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "{{attendance_status?.data?.monthly_records?.year ?? ''}} - {{attendance_status?.data?.monthly_records?.month ?? ''}}",
+                      "className": "text-lg font-bold text-gray-800 dark:text-gray-100"
+                    }
+                  },
+                  {
+                    "id": "calendar_next_btn",
+                    "name": "Button",
+                    "type": "basic",
+                    "props": {
+                      "text": "▶",
+                      "type": "button",
+                      "className": "px-3 py-1 text-sm rounded bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200"
+                    },
+                    "actions": [
+                      {
+                        "type": "click",
+                        "handler": "navigate",
+                        "params": {
+                          "path": "{{attendance_status?.data?.monthly_records?.next_month_url ?? ''}}",
+                          "mergeQuery": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "calendar_weekday_header",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "grid grid-cols-7 gap-1 mb-2"
+                },
+                "children": [
+                  {
+                    "id": "weekday_sun",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.calendar.sun",
+                      "className": "text-center text-xs font-semibold text-red-500 dark:text-red-400"
+                    }
+                  },
+                  {
+                    "id": "weekday_mon",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.calendar.mon",
+                      "className": "text-center text-xs font-semibold text-gray-600 dark:text-gray-400"
+                    }
+                  },
+                  {
+                    "id": "weekday_tue",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.calendar.tue",
+                      "className": "text-center text-xs font-semibold text-gray-600 dark:text-gray-400"
+                    }
+                  },
+                  {
+                    "id": "weekday_wed",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.calendar.wed",
+                      "className": "text-center text-xs font-semibold text-gray-600 dark:text-gray-400"
+                    }
+                  },
+                  {
+                    "id": "weekday_thu",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.calendar.thu",
+                      "className": "text-center text-xs font-semibold text-gray-600 dark:text-gray-400"
+                    }
+                  },
+                  {
+                    "id": "weekday_fri",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.calendar.fri",
+                      "className": "text-center text-xs font-semibold text-gray-600 dark:text-gray-400"
+                    }
+                  },
+                  {
+                    "id": "weekday_sat",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.calendar.sat",
+                      "className": "text-center text-xs font-semibold text-blue-500 dark:text-blue-400"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "calendar_days",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "grid grid-cols-7 gap-1"
+                },
+                "iteration": {
+                  "source": "{{attendance_status?.data?.monthly_records?.days ?? []}}",
+                  "item_var": "day_item",
+                  "index_var": "day_index"
+                },
+                "children": [
+                  {
+                    "id": "calendar_day_cell",
+                    "name": "Div",
+                    "type": "basic",
+                    "props": {
+                      "className": "w-full aspect-square flex flex-col items-center justify-center text-xs rounded"
+                    },
+                    "children": [
+                      {
+                        "id": "day_number_attended",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{day_item.status === 'attended'}}",
+                        "props": {
+                          "text": "{{day_item.day ?? ''}}",
+                          "className": "font-bold text-blue-600 dark:text-blue-400"
+                        }
+                      },
+                      {
+                        "id": "day_dot_attended",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{day_item.status === 'attended'}}",
+                        "props": {
+                          "text": "●",
+                          "className": "text-blue-600 dark:text-blue-400 text-xs leading-none"
+                        }
+                      },
+                      {
+                        "id": "day_number_absent",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{day_item.status === 'absent'}}",
+                        "props": {
+                          "text": "{{day_item.day ?? ''}}",
+                          "className": "font-bold text-red-500 dark:text-red-400"
+                        }
+                      },
+                      {
+                        "id": "day_dot_absent",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{day_item.status === 'absent'}}",
+                        "props": {
+                          "text": "◎",
+                          "className": "text-red-500 dark:text-red-400 text-xs leading-none"
+                        }
+                      },
+                      {
+                        "id": "day_number_future",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{day_item.status === 'future'}}",
+                        "props": {
+                          "text": "{{day_item.day ?? ''}}",
+                          "className": "text-gray-400 dark:text-gray-500"
+                        }
+                      },
+                      {
+                        "id": "day_dot_future",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{day_item.status === 'future'}}",
+                        "props": {
+                          "text": "○",
+                          "className": "text-gray-400 dark:text-gray-500 text-xs leading-none"
+                        }
+                      },
+                      {
+                        "id": "day_number_empty",
+                        "name": "Span",
+                        "type": "basic",
+                        "if": "{{day_item.status === 'empty'}}",
+                        "props": {
+                          "text": "",
+                          "className": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "calendar_legend",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "flex items-center justify-center gap-4 mt-3 text-xs text-gray-500 dark:text-gray-400"
+                },
+                "children": [
+                  {
+                    "id": "legend_attended",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "● $t:yjsoft-attendance.attendance.calendar.attended",
+                      "className": "text-blue-600 dark:text-blue-400"
+                    }
+                  },
+                  {
+                    "id": "legend_absent",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "◎ $t:yjsoft-attendance.attendance.calendar.absent",
+                      "className": "text-red-500 dark:text-red-400"
+                    }
+                  },
+                  {
+                    "id": "legend_future",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "○ $t:yjsoft-attendance.attendance.calendar.future",
+                      "className": "text-gray-400 dark:text-gray-500"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "attend_form",
+            "name": "Form",
+            "type": "basic",
+            "if": "{{!attendance_status?.data?.is_attended_today}}",
+            "props": {
+              "className": "bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-700 mb-6"
+            },
+            "children": [
+              {
+                "id": "attend_form_title",
+                "name": "H3",
+                "type": "basic",
+                "props": {
+                  "className": "text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100"
+                },
+                "children": [
+                  {
+                    "id": "attend_form_title_text",
+                    "name": "Span",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.attend_btn"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "greeting_input_wrapper",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "flex gap-3"
+                },
+                "children": [
+                  {
+                    "id": "greeting_input",
+                    "name": "Input",
+                    "type": "basic",
+                    "props": {
+                      "value": "{{_local.greeting ?? ''}}",
+                      "placeholder": "$t:yjsoft-attendance.attendance.greeting_placeholder",
+                      "maxLength": 255,
+                      "className": "flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    },
+                    "actions": [
+                      {
+                        "type": "change",
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "greeting": "{{$event.target.value}}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "attend_btn",
+                    "name": "Button",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.attendance.attend_btn",
+                      "type": "button",
+                      "disabled": "{{_local.isSubmitting}}",
+                      "className": "px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-blue-500 dark:hover:bg-blue-600"
+                    },
+                    "actions": [
+                      {
+                        "type": "click",
+                        "handler": "sequence",
+                        "actions": [
+                          {
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "isSubmitting": true
+                            }
+                          },
+                          {
+                            "handler": "apiCall",
+                            "target": "/api/modules/yjsoft-attendance/auth/attend",
+                            "params": {
+                              "method": "POST",
+                              "body": {
+                                "greeting": "{{_local.greeting ?? ''}}"
+                              }
+                            },
+                            "onSuccess": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "isSubmitting": false
+                                }
+                              },
+                              {
+                                "handler": "refetchDataSource",
+                                "params": {
+                                  "dataSourceId": "attendance_status"
+                                }
+                              },
+                              {
+                                "handler": "refetchDataSource",
+                                "params": {
+                                  "dataSourceId": "attendance_list"
+                                }
+                              },
+                              {
+                                "handler": "toast",
+                                "params": {
+                                  "type": "success",
+                                  "message": "$t:yjsoft-attendance.attendance.attend_success"
+                                }
+                              }
+                            ],
+                            "onError": [
+                              {
+                                "handler": "setState",
+                                "params": {
+                                  "target": "local",
+                                  "isSubmitting": false
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "attend_done_message",
+            "name": "Div",
+            "type": "basic",
+            "if": "{{attendance_status?.data?.is_attended_today}}",
+            "props": {
+              "className": "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 mb-6 text-center"
+            },
+            "children": [
+              {
+                "id": "attend_done_text",
+                "name": "Span",
+                "type": "basic",
+                "props": {
+                  "text": "$t:yjsoft-attendance.attendance.attend_done_message",
+                  "className": "text-green-700 dark:text-green-300"
+                }
+              }
+            ]
+          },
+          {
+            "id": "attendance_list_section",
+            "name": "Div",
+            "type": "basic",
+            "props": {
+              "className": "bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
+            },
+            "children": [
+              {
+                "id": "list_title",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "p-4 border-b border-gray-200 dark:border-gray-700"
+                },
+                "children": [
+                  {
+                    "id": "list_title_text",
+                    "name": "H3",
+                    "type": "basic",
+                    "props": {
+                      "className": "text-lg font-semibold text-gray-800 dark:text-gray-100"
+                    },
+                    "children": [
+                      {
+                        "id": "list_title_span",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.attendance.rank.title"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "list_table_wrapper",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "overflow-x-auto"
+                },
+                "children": [
+                  {
+                    "id": "list_table",
+                    "name": "Table",
+                    "type": "basic",
+                    "props": {
+                      "className": "w-full text-sm text-left"
+                    },
+                    "children": [
+                      {
+                        "id": "list_table_head",
+                        "name": "Div",
+                        "type": "basic",
+                        "props": {
+                          "className": "bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs uppercase"
+                        },
+                        "children": [
+                          {
+                            "id": "list_head_row",
+                            "name": "Div",
+                            "type": "basic",
+                            "props": {
+                              "className": "grid grid-cols-8 gap-2 px-4 py-3"
+                            },
+                            "children": [
+                              {
+                                "id": "th_rank",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "$t:yjsoft-attendance.attendance.list.rank",
+                                  "className": "font-semibold"
+                                }
+                              },
+                              {
+                                "id": "th_time",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "$t:yjsoft-attendance.attendance.list.time",
+                                  "className": "font-semibold"
+                                }
+                              },
+                              {
+                                "id": "th_greeting",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "$t:yjsoft-attendance.attendance.list.greeting",
+                                  "className": "font-semibold col-span-2"
+                                }
+                              },
+                              {
+                                "id": "th_nickname",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "$t:yjsoft-attendance.attendance.list.nickname",
+                                  "className": "font-semibold"
+                                }
+                              },
+                              {
+                                "id": "th_point",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "$t:yjsoft-attendance.attendance.list.point",
+                                  "className": "font-semibold"
+                                }
+                              },
+                              {
+                                "id": "th_random",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "$t:yjsoft-attendance.attendance.list.random_point",
+                                  "className": "font-semibold"
+                                }
+                              },
+                              {
+                                "id": "th_total",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "$t:yjsoft-attendance.attendance.list.total_days",
+                                  "className": "font-semibold"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "id": "list_table_body",
+                        "name": "Div",
+                        "type": "basic",
+                        "iteration": {
+                          "source": "{{attendance_list?.data?.data ?? []}}",
+                          "item_var": "row_item",
+                          "index_var": "row_index"
+                        },
+                        "props": {
+                          "className": "border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750"
+                        },
+                        "children": [
+                          {
+                            "id": "list_body_row",
+                            "name": "Div",
+                            "type": "basic",
+                            "props": {
+                              "className": "grid grid-cols-8 gap-2 px-4 py-3 items-center"
+                            },
+                            "children": [
+                              {
+                                "id": "td_rank",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "{{row_item.daily_rank ?? '-'}}",
+                                  "className": "font-semibold text-gray-800 dark:text-gray-200"
+                                }
+                              },
+                              {
+                                "id": "td_time",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "{{row_item.attend_time ?? ''}}",
+                                  "className": "text-gray-600 dark:text-gray-400 text-xs"
+                                }
+                              },
+                              {
+                                "id": "td_greeting",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "{{row_item.greeting ?? ''}}",
+                                  "className": "col-span-2 text-gray-700 dark:text-gray-300 truncate"
+                                }
+                              },
+                              {
+                                "id": "td_nickname",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "{{row_item.nickname ?? ''}}",
+                                  "className": "text-gray-800 dark:text-gray-200"
+                                }
+                              },
+                              {
+                                "id": "td_point",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "{{row_item.base_point ?? 0}}",
+                                  "className": "text-gray-600 dark:text-gray-400"
+                                }
+                              },
+                              {
+                                "id": "td_random",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "{{row_item.random_point > 0 ? row_item.random_point : '-'}}",
+                                  "className": "text-gray-600 dark:text-gray-400"
+                                }
+                              },
+                              {
+                                "id": "td_total",
+                                "name": "Span",
+                                "type": "basic",
+                                "props": {
+                                  "text": "{{row_item.total_count ?? 0}}",
+                                  "className": "text-gray-600 dark:text-gray-400"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "list_pagination",
+                "name": "Div",
+                "type": "basic",
+                "if": "{{attendance_list?.data?.meta?.last_page > 1}}",
+                "props": {
+                  "className": "p-4 flex justify-center"
+                },
+                "children": [
+                  {
+                    "id": "pagination_component",
+                    "name": "Pagination",
+                    "type": "composite",
+                    "props": {
+                      "currentPage": "{{attendance_list?.data?.meta?.current_page ?? 1}}",
+                      "totalPages": "{{attendance_list?.data?.meta?.last_page ?? 1}}"
+                    },
+                    "actions": [
+                      {
+                        "event": "onPageChange",
+                        "handler": "navigate",
+                        "params": {
+                          "mergeQuery": true,
+                          "query": {
+                            "page": "{{$args[0]}}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
