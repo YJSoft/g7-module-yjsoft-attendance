@@ -230,5 +230,3 @@ enum StreakType: string
 - [ ] `attendance_records` 마이그레이션 작성
 - [ ] `attendance_streaks` 마이그레이션 작성
 - [ ] `attendance_daily_ranks` 마이그레이션 작성
-- [ ] 마이그레이션 실행 테스트 (`php artisan migrate`)
-- [ ] 롤백 테스트 (`php artisan migrate:rollback`)
