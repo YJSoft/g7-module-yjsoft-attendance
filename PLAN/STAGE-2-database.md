@@ -225,8 +225,8 @@ enum StreakType: string
 
 ## 2.8 단계 완료 체크리스트
 
-- [ ] `StreakType` Enum 작성
-- [ ] `AccessControlMode` Enum 작성
-- [ ] `attendance_records` 마이그레이션 작성
-- [ ] `attendance_streaks` 마이그레이션 작성
-- [ ] `attendance_daily_ranks` 마이그레이션 작성
+- [x] `StreakType` Enum 작성
+- [x] `AccessControlMode` Enum 작성
+- [x] `attendance_records` 마이그레이션 작성
+- [x] `attendance_streaks` 마이그레이션 작성
+- [x] `attendance_daily_ranks` 마이그레이션 작성

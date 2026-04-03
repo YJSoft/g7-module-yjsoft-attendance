@@ -26,6 +26,12 @@ return [
         'random_bonus'  => 'Random Bonus Points',
     ],
 
+    'access_control' => [
+        'disabled'      => 'Auto Attendance Disabled',
+        'on_login'      => 'Auto Attend on Login',
+        'on_auto_login' => 'Auto Attend on Auto Login',
+    ],
+
     'validation' => [
         'greeting_required' => 'Please enter a greeting.',
         'greeting_max'      => 'Greeting must not exceed :max characters.',
