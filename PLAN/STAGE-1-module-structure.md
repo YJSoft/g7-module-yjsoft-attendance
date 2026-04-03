@@ -446,17 +446,15 @@ resources/lang/
 
 ## 1.8 단계 완료 체크리스트
 
-- [ ] `modules/_bundled/yjsoft-attendance/` 디렉토리 생성
-- [ ] `module.json` 작성
-- [ ] `LICENSE` 파일 추가
-- [ ] `composer.json` 작성 (루트 composer.json 수정 금지)
-- [ ] `module.php` (AbstractModule 상속) 작성
-  - [ ] `getPermissions()` 정의
-  - [ ] `getAdminMenus()` 정의
-  - [ ] `getHookListeners()` 정의
-- [ ] `config/settings/defaults.json` 작성
-- [ ] `src/lang/ko/messages.php` 작성 (백엔드 다국어, `src/lang/` 경로 필수)
-- [ ] `src/lang/en/messages.php` 작성
-- [ ] `resources/lang/ko.json` 작성 (중첩 객체 구조, moduleIdentifier 없이 작성)
-- [ ] `resources/lang/en.json` 작성
-- [ ] `php artisan module:install yjsoft-attendance` 실행 확인 (마이그레이션 + 권한/역할/메뉴 자동 등록)
+- [x] `module.json` 작성
+- [x] `LICENSE` 파일 추가
+- [x] `composer.json` 작성 (루트 composer.json 수정 금지)
+- [x] `module.php` (AbstractModule 상속) 작성
+  - [x] `getPermissions()` 정의
+  - [x] `getAdminMenus()` 정의
+  - [x] `getHookListeners()` 정의
+- [x] `config/settings/defaults.json` 작성
+- [x] `src/lang/ko/messages.php` 작성 (백엔드 다국어, `src/lang/` 경로 필수)
+- [x] `src/lang/en/messages.php` 작성
+- [x] `resources/lang/ko.json` 작성 (중첩 객체 구조, moduleIdentifier 없이 작성)
+- [x] `resources/lang/en.json` 작성
