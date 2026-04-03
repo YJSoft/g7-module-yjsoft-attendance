@@ -392,20 +392,20 @@ DB 등록명: `yjsoft-attendance.user_attendance_index`
 
 ## 4U.12 단계 완료 체크리스트
 
-- [ ] `resources/layouts/user/user_attendance_index.json` 작성
-  - [ ] `data_sources` 정의 (유저용 Auth API만 사용)
-  - [ ] 상단 현재 시각 표시 (JS 핸들러 연동)
-  - [ ] 상태 헤더 영역 (출석점수, 진행상태, 출석여부, 출석권한)
-  - [ ] 자세히 보기 드롭다운 (개근점수, 랭킹점수, 개근분류)
-  - [ ] 달력 영역 (출석/결석/미출석 시각화, 이전/다음달 이동)
-  - [ ] 출석 처리 영역 (인삿말 입력 + 출석하기 버튼)
-  - [ ] 출석 완료 메시지 영역
-  - [ ] 출석자 목록 테이블 (페이지네이션 포함)
-- [ ] `resources/routes/user.json` 작성
-- [ ] `resources/js/index.ts` — 현재 시각 타이머 핸들러 구현
-- [ ] `resources/js/index.ts` — 랜덤 인삿말 초기화 로직
-- [ ] `package.json`, `vite.config.ts`, `tsconfig.json` 작성
-- [ ] 다크 모드 클래스 적용 확인 (`dark:` variant)
-- [ ] 모든 데이터 바인딩 fallback(`??`) 적용 확인
-- [ ] `item`, `index` 대신 `item_var`, `index_var` 사용 확인
-- [ ] HTML 태그 직접 사용하지 않았는지 확인 (`Div`, `Button`, `Input` 등 컴포넌트 사용)
+- [x] `resources/layouts/user/user_attendance_index.json` 작성
+  - [x] `data_sources` 정의 (유저용 Auth API만 사용)
+  - [x] 상단 현재 시각 표시 (JS 핸들러 연동)
+  - [x] 상태 헤더 영역 (출석점수, 진행상태, 출석여부, 출석권한)
+  - [x] 자세히 보기 드롭다운 (개근점수, 랭킹점수, 개근분류)
+  - [x] 달력 영역 (출석/결석/미출석 시각화, 이전/다음달 이동)
+  - [x] 출석 처리 영역 (인삿말 입력 + 출석하기 버튼)
+  - [x] 출석 완료 메시지 영역
+  - [x] 출석자 목록 테이블 (페이지네이션 포함)
+- [x] `resources/routes/user.json` 작성
+- [x] `resources/js/index.ts` — 현재 시각 타이머 핸들러 구현
+- [x] `resources/js/index.ts` — 랜덤 인삿말 초기화 로직
+- [x] `package.json`, `vite.config.ts`, `tsconfig.json` 작성
+- [x] 다크 모드 클래스 적용 확인 (`dark:` variant)
+- [x] 모든 데이터 바인딩 fallback(`??`) 적용 확인
+- [x] `item`, `index` 대신 `item_var`, `index_var` 사용 확인
+- [x] HTML 태그 직접 사용하지 않았는지 확인 (`Div`, `Button`, `Input` 등 컴포넌트 사용)

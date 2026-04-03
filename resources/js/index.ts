@@ -2,31 +2,6 @@ import '../css/main.css';
 
 const MODULE_IDENTIFIER = 'yjsoft-attendance';
 
-/**
- * G7Core global interface
- */
-interface G7CoreGlobal {
-    state?: {
-        setLocal: (key: string, value: unknown) => void;
-        getLocal: (key: string) => unknown;
-    };
-    getActionDispatcher?: () => {
-        registerHandler: (name: string, handler: (...args: unknown[]) => void) => void;
-    } | null;
-    t?: (key: string, params?: Record<string, unknown>) => string | undefined;
-    toast?: {
-        success?: (message: string) => void;
-        warning?: (message: string) => void;
-        error?: (message: string) => void;
-    };
-}
-
-declare global {
-    interface Window {
-        G7Core?: G7CoreGlobal;
-    }
-}
-
 let clockTimer: ReturnType<typeof setInterval> | null = null;
 
 /**
@@ -47,7 +22,7 @@ function formatDateTime(): string {
  * Start the clock timer — updates _local.currentTime every second
  */
 function startClock(): void {
-    const G7Core = window.G7Core;
+    const G7Core = (window as any).G7Core;
     if (!G7Core?.state?.setLocal) return;
 
     // Set initial time immediately
@@ -55,7 +30,7 @@ function startClock(): void {
 
     // Update every second
     clockTimer = setInterval(() => {
-        G7Core.state?.setLocal('currentTime', formatDateTime());
+        (window as any).G7Core?.state?.setLocal('currentTime', formatDateTime());
     }, 1000);
 }
 
@@ -72,8 +47,8 @@ function stopClock(): void {
 /**
  * Initialize random greeting from settings data
  */
-function initRandomGreeting(params: Record<string, unknown>): void {
-    const G7Core = window.G7Core;
+function initRandomGreeting(params: Record<string, any>): void {
+    const G7Core = (window as any).G7Core;
     if (!G7Core?.state?.setLocal) return;
 
     const greetings = params.greetings as string[] | undefined;
@@ -100,15 +75,15 @@ function stopClockHandler(): void {
 /**
  * Handler map for this module
  */
-const handlerMap: Record<string, (...args: unknown[]) => void> = {
+const handlerMap: Record<string, (...args: any[]) => void> = {
     startClock: startClockHandler,
     stopClock: stopClockHandler,
-    initRandomGreeting: initRandomGreeting as (...args: unknown[]) => void,
+    initRandomGreeting: initRandomGreeting,
 };
 
 export function initModule(): void {
     const registerHandlers = () => {
-        const actionDispatcher = window.G7Core?.getActionDispatcher?.();
+        const actionDispatcher = (window as any).G7Core?.getActionDispatcher?.();
 
         if (actionDispatcher) {
             Object.entries(handlerMap).forEach(([name, handler]) => {
