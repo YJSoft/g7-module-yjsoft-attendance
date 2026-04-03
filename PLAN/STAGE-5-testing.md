@@ -30,8 +30,8 @@
 | Service 테스트 | `tests/Unit/Services/AttendanceSettingsServiceTest.php` |
 | Controller 테스트 | `tests/Feature/Controllers/AttendanceControllerTest.php` |
 | Controller 테스트 | `tests/Feature/Controllers/AttendanceSettingsControllerTest.php` |
-| 레이아웃 테스트 | `modules/_bundled/yjsoft-attendance/resources/js/__tests__/layouts/user_attendance_index.test.tsx` |
-| 레이아웃 테스트 | `modules/_bundled/yjsoft-attendance/resources/js/__tests__/layouts/admin_attendance_settings.test.tsx` |
+| 레이아웃 테스트 | `resources/js/__tests__/layouts/user_attendance_index.test.tsx` |
+| 레이아웃 테스트 | `resources/js/__tests__/layouts/admin_attendance_settings.test.tsx` |
 
 ---
 
