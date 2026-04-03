@@ -156,7 +156,7 @@ modules/_bundled/yjsoft-attendance/
 
 #### `getRoles()`
 출석부 모듈은 자체 역할을 별도로 정의하지 않는다.  
-출석 허용/금지는 기존 코어 역할(Role) 식별자를 사용하며, 모듈 설정에서 운영자가 직접 지정한다.
+출석 허용 역할은 `getPermissions()`의 `roles` 필드에서 지정한다 (`yjsoft-attendance.attend` → `user` 역할 기본 부여).
 
 #### `getPermissions()`
 
