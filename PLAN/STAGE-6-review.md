@@ -141,25 +141,6 @@ return [
 
 ---
 
-## 6.6 모듈 활성화 최종 점검
-
-> **규칙**: 모듈 관련 모든 작업은 Artisan 커맨드로 수행. 직접 DB 조작 또는 파일 시스템 변경 금지.  
-> 참고: [module-commands.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-commands.md)
-
-```bash
-# 모듈 설치 (마이그레이션 + 권한/역할/메뉴 자동 등록)
-php artisan module:install yjsoft-attendance
-
-# 모듈 활성화 (레이아웃 등록, 라우트/훅 활성화, 캐시 무효화)
-php artisan module:activate yjsoft-attendance
-
-# 목록 및 상태 확인
-php artisan module:list
-
-# 프론트엔드 에셋 빌드
-php artisan module:build yjsoft-attendance
-```
-
 ### 활성화 후 확인 사항
 
 - [ ] DB에 레이아웃 등록 확인 (`template_layouts` 테이블)
@@ -178,6 +159,5 @@ php artisan module:build yjsoft-attendance
 - [ ] 보안 검토(6.3) 완료
 - [ ] 성능 검토(6.4) 완료
 - [ ] 다국어 완성도 검토(6.5) 완료 (하드코딩 메시지 없음)
-- [ ] 모듈 활성화 최종 점검(6.6) 완료
 - [ ] FORBIDDEN-PATTERNS.md의 금지 패턴이 코드에 없음 확인
 - [ ] 코드 리뷰 완료
