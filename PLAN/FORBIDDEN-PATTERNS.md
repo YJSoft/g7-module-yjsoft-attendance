@@ -167,7 +167,17 @@
 
 ---
 
-## FP-13. 테스트 패턴
+## FP-14. 다국어(i18n) 패턴
+
+> 출처: [module-i18n.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-i18n.md)
+
+| ❌ 금지 | ✅ 올바른 방법 |
+|--------|-------------|
+| 백엔드 lang 파일을 `lang/ko/` (모듈 루트)에 배치 | `src/lang/ko/` 하위에 배치 (TranslationServiceProvider 자동 로드 경로) |
+| `__('yjsoft-attendance.messages.key')` (점 . 사용) | `__('yjsoft-attendance::messages.key')` (더블 콜론 :: 필수) |
+| 프론트엔드 JSON에 `{ "yjsoft-attendance": { ... } }` 형태로 작성 | moduleIdentifier 없이 순수 키만 작성 (시스템이 자동 병합) |
+| 프론트엔드 JSON 키를 플랫 dot-notation으로 작성 (`"attendance.title": "..."`) | 중첩 객체 구조로 작성 (`{ "attendance": { "title": "..." } }`) |
+| 500줄 초과 JSON을 단일 파일로 유지 | `$partial` 디렉티브로 도메인별 분리 |
 
 > 출처: [AGENTS.md — 테스트 프로토콜](https://github.com/gnuboard/g7/blob/main/AGENTS.md)
 

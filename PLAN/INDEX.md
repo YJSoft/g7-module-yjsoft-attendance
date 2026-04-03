@@ -65,6 +65,7 @@
 | 모듈 레이아웃 | https://github.com/gnuboard/g7/blob/main/docs/extension/module-layouts.md |
 | 모듈 설정 | https://github.com/gnuboard/g7/blob/main/docs/extension/module-settings.md |
 | 모듈 라우트 | https://github.com/gnuboard/g7/blob/main/docs/extension/module-routing.md |
+| 모듈 다국어 | https://github.com/gnuboard/g7/blob/main/docs/extension/module-i18n.md |
 | 컨트롤러 계층 | https://github.com/gnuboard/g7/blob/main/docs/backend/controllers.md |
 | 라우트 네이밍 | https://github.com/gnuboard/g7/blob/main/docs/backend/routing.md |
 | Service-Repository | https://github.com/gnuboard/g7/blob/main/docs/backend/service-repository.md |

@@ -3,6 +3,7 @@
 > **참고 문서**
 > - [module-basics.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-basics.md)
 > - [module-routing.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-routing.md)
+> - [module-i18n.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-i18n.md)
 > - [permissions.md](https://github.com/gnuboard/g7/blob/main/docs/extension/permissions.md)
 > - [AGENTS.md](https://github.com/gnuboard/g7/blob/main/AGENTS.md)
 
@@ -41,11 +42,6 @@ modules/_bundled/yjsoft-attendance/
 │   │   └── xxxx_create_attendance_daily_ranks_table.php
 │   └── seeders/
 │       └── DatabaseSeeder.php
-├── lang/
-│   ├── ko/
-│   │   └── messages.php
-│   └── en/
-│       └── messages.php
 ├── resources/
 │   ├── js/
 │   │   ├── index.ts                     # 에셋 엔트리포인트
@@ -96,6 +92,11 @@ modules/_bundled/yjsoft-attendance/
     │   ├── AttendanceStreakService.php
     │   ├── AttendanceRankService.php
     │   └── AttendanceSettingsService.php
+    ├── lang/                            # 백엔드 다국어 파일 (src/ 하위 필수)
+    │   ├── ko/
+    │   │   └── messages.php
+    │   └── en/
+    │       └── messages.php
     └── routes/
         └── api.php
 ```
@@ -287,19 +288,48 @@ modules/_bundled/yjsoft-attendance/
 
 ## 1.7 다국어 파일 구조
 
-### 백엔드 (`lang/ko/messages.php`)
+> **참고 문서**: [module-i18n.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-i18n.md)
+
+### 핵심 원칙
+
+| 구분 | 파일 경로 | 형식 | 사용처 |
+|------|---------|------|------|
+| 백엔드 | `src/lang/{locale}/*.php` | PHP 배열 | Laravel `__()` 함수 |
+| 프론트엔드 | `resources/lang/{locale}.json` | JSON (중첩 객체) | 레이아웃 JSON `$t:` 문법 |
+
+> **규칙**: 백엔드 다국어 파일은 반드시 `src/lang/` 디렉토리에 위치해야 한다.  
+> TranslationServiceProvider가 이 경로에서 파일을 자동으로 로드한다.  
+> 참고: [module-i18n.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-i18n.md)
+
+### 백엔드 (`src/lang/ko/messages.php`)
 
 ```php
 <?php
 return [
-    'attend_success'       => '출석이 완료되었습니다.',
-    'already_attended'     => '오늘 이미 출석하셨습니다.',
-    'not_allowed'          => '출석 권한이 없습니다.',
-    'time_not_allowed'     => '현재 출석 가능 시간이 아닙니다.',
-    'settings_saved'       => '설정이 저장되었습니다.',
+    'attend_success'         => '출석이 완료되었습니다.',
+    'already_attended'       => '오늘 이미 출석하셨습니다.',
+    'not_allowed'            => '출석 권한이 없습니다.',
+    'time_not_allowed'       => '현재 출석 가능 시간이 아닙니다.',
+    'settings_saved'         => '설정이 저장되었습니다.',
     'settings_fetch_success' => '설정을 불러왔습니다.',
+    'streak' => [
+        'weekly'  => '주간 개근',
+        'monthly' => '월간 개근',
+        'yearly'  => '연간 개근',
+    ],
     // ...
 ];
+```
+
+백엔드에서 사용 시 **더블 콜론(`::`) 문법** 필수:
+
+```php
+// ✅ 올바른 사용 (더블 콜론 ::)
+__('yjsoft-attendance::messages.attend_success');
+__('yjsoft-attendance::messages.streak.weekly');
+
+// ❌ 금지 (점 . 사용)
+__('yjsoft-attendance.messages.attend_success');  // 작동하지 않음
 ```
 
 > **규칙**: 예외 메시지 하드코딩 금지 → `__()` 함수 필수  
@@ -307,20 +337,71 @@ return [
 
 ### 프론트엔드 (`resources/lang/ko.json`)
 
+> **규칙**: JSON 파일에는 `moduleIdentifier` 없이 순수 키만 작성한다.  
+> 템플릿 서빙 시 시스템이 자동으로 `yjsoft-attendance`를 최상위 키로 병합한다.  
+> **금지**: `{ "yjsoft-attendance": { ... } }` 형태로 직접 작성하지 않는다.  
+> **형식**: 플랫 dot-notation 키(`"attendance.title"`) 사용 금지 → 중첩 객체 구조로 작성한다.
+
 ```json
 {
-  "attendance.title": "출석부",
-  "attendance.attend_btn": "출석하기",
-  "attendance.greeting_placeholder": "인삿말을 입력하세요",
-  "attendance.already_done": "출석 완료",
-  "attendance.streak.weekly": "주간 개근",
-  "attendance.streak.monthly": "월간 개근",
-  "attendance.streak.yearly": "연간 개근",
-  "attendance.rank.title": "출석 순위",
-  "settings.title": "출석부 설정",
-  "settings.save": "설정 저장"
+  "attendance": {
+    "title": "출석부",
+    "attend_btn": "출석하기",
+    "greeting_placeholder": "인삿말을 입력하세요",
+    "already_done": "출석 완료",
+    "streak": {
+      "weekly": "주간 개근",
+      "monthly": "월간 개근",
+      "yearly": "연간 개근"
+    },
+    "rank": {
+      "title": "출석 순위"
+    }
+  },
+  "settings": {
+    "title": "출석부 설정",
+    "save": "설정 저장",
+    "save_success": "설정이 저장되었습니다.",
+    "delete": "삭제"
+  }
 }
 ```
+
+레이아웃 JSON에서 사용 시 `moduleIdentifier`가 자동으로 앞에 붙는다:
+
+```json
+{ "text": "$t:yjsoft-attendance.attendance.title" }
+{ "text": "$t:yjsoft-attendance.attendance.streak.weekly" }
+{ "text": "$t:yjsoft-attendance.settings.save" }
+```
+
+### 파일이 커질 경우 — `$partial` 분리
+
+JSON 파일이 500줄을 초과하면 `$partial` 디렉티브로 도메인별 분리:
+
+```
+resources/lang/
+├── ko.json                          # 메인 (fragment 참조)
+├── en.json
+└── partial/
+    ├── ko/
+    │   ├── attendance.json          # 출석 관련 키
+    │   └── settings.json           # 설정 관련 키
+    └── en/
+        ├── attendance.json
+        └── settings.json
+```
+
+```json
+// resources/lang/ko.json
+{
+  "attendance": { "$partial": "partial/ko/attendance.json" },
+  "settings":   { "$partial": "partial/ko/settings.json" }
+}
+```
+
+> 500줄 이하인 경우 단일 파일 유지 권장.  
+> 참고: [module-i18n.md — $partial Fragment 시스템](https://github.com/gnuboard/g7/blob/main/docs/extension/module-i18n.md)
 
 ---
 
@@ -335,8 +416,8 @@ return [
   - [ ] `getAdminMenus()` 정의
   - [ ] `getHookListeners()` 정의
 - [ ] `config/settings/defaults.json` 작성
-- [ ] `lang/ko/messages.php` 작성
-- [ ] `lang/en/messages.php` 작성
-- [ ] `resources/lang/ko.json` 작성
+- [ ] `src/lang/ko/messages.php` 작성 (백엔드 다국어, `src/lang/` 경로 필수)
+- [ ] `src/lang/en/messages.php` 작성
+- [ ] `resources/lang/ko.json` 작성 (중첩 객체 구조, moduleIdentifier 없이 작성)
 - [ ] `resources/lang/en.json` 작성
 - [ ] `php artisan extension:update-autoload` 실행 확인
