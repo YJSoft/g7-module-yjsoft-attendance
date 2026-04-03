@@ -1,0 +1,61 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "출석부 모듈 설정",
+    "categories": [
+      "general",
+      "bonus",
+      "time_limit",
+      "random_point",
+      "greetings"
+    ]
+  },
+  "defaults": {
+    "general": {
+      "auto_attend": false
+    },
+    "bonus": {
+      "base_point": 10,
+      "weekly_streak_point": 50,
+      "monthly_streak_point": 100,
+      "yearly_streak_point": 1000,
+      "rank1_point": 100,
+      "rank2_point": 50,
+      "rank3_point": 30
+    },
+    "time_limit": {
+      "enabled": false,
+      "start_hour": 0,
+      "start_minute": 0,
+      "end_hour": 23,
+      "end_minute": 59
+    },
+    "random_point": {
+      "enabled": false,
+      "min_point": 1,
+      "max_point": 100,
+      "probability": 30
+    },
+    "greetings": {
+      "list": [
+        "안녕하세요",
+        "출석합니다",
+        "출첵!",
+        "오늘도 출첵!",
+        "좋은하루 되세요"
+      ]
+    }
+  },
+  "frontend_schema": {
+    "general": {
+      "expose": true,
+      "fields": {
+        "auto_attend": { "expose": true }
+      }
+    },
+    "bonus": { "expose": true },
+    "time_limit": { "expose": true },
+    "random_point": { "expose": true },
+    "greetings": { "expose": true }
+  }
+}
