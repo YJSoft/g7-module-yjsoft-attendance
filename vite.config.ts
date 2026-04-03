@@ -13,7 +13,7 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 entryFileNames: 'js/[name].iife.js',
-                assetFileNames: (assetInfo) => {
+                assetFileNames: (assetInfo: { name?: string }) => {
                     if (assetInfo.name?.endsWith('.css')) {
                         return 'css/[name][extname]';
                     }
