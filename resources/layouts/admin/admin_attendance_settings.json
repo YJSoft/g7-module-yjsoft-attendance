@@ -1,0 +1,814 @@
+{
+  "layout_name": "admin_attendance_settings",
+  "version": "1.0.0",
+  "extends": "_admin_base",
+  "meta": {
+    "title": "$t:yjsoft-attendance.settings.title",
+    "auth_required": true
+  },
+  "data_sources": [
+    {
+      "id": "settings",
+      "type": "api",
+      "method": "GET",
+      "endpoint": "/api/modules/yjsoft-attendance/admin/settings",
+      "auto_fetch": true,
+      "auth_required": true,
+      "initLocal": "form",
+      "refetchOnMount": true
+    }
+  ],
+  "state": {
+    "isSaving": false,
+    "form": {}
+  },
+  "slots": {
+    "content": [
+      {
+        "id": "settings_page_wrapper",
+        "name": "Div",
+        "type": "basic",
+        "props": {
+          "className": "max-w-4xl mx-auto"
+        },
+        "children": [
+          {
+            "id": "settings_page_header",
+            "name": "PageHeader",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.settings.title"
+            }
+          },
+          {
+            "id": "section_general",
+            "name": "Card",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.settings.general.title",
+              "className": "mb-6"
+            },
+            "children": [
+              {
+                "id": "field_auto_attend",
+                "name": "FormField",
+                "type": "composite",
+                "props": {
+                  "label": "$t:yjsoft-attendance.settings.general.auto_attend"
+                },
+                "children": [
+                  {
+                    "id": "toggle_auto_attend",
+                    "name": "Toggle",
+                    "type": "composite",
+                    "props": {
+                      "checked": "{{_local.form?.general?.auto_attend ?? false}}",
+                      "label": "$t:yjsoft-attendance.settings.general.auto_attend_description"
+                    },
+                    "actions": [
+                      {
+                        "type": "change",
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "form.general.auto_attend": "{{$event.target.checked}}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section_bonus",
+            "name": "Card",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.settings.bonus.title",
+              "className": "mb-6"
+            },
+            "children": [
+              {
+                "id": "field_base_point",
+                "name": "FormField",
+                "type": "composite",
+                "props": {
+                  "label": "$t:yjsoft-attendance.settings.bonus.base_point"
+                },
+                "children": [
+                  {
+                    "id": "input_base_point",
+                    "name": "Input",
+                    "type": "basic",
+                    "props": {
+                      "type": "number",
+                      "value": "{{_local.form?.bonus?.base_point ?? 0}}",
+                      "className": "w-full"
+                    },
+                    "actions": [
+                      {
+                        "type": "change",
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "form.bonus.base_point": "{{Number($event.target.value) || 0}}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "bonus_streak_grid",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"
+                },
+                "children": [
+                  {
+                    "id": "field_weekly_streak",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.bonus.weekly_streak_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_weekly_streak",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.bonus?.weekly_streak_point ?? 0}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.bonus.weekly_streak_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_monthly_streak",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.bonus.monthly_streak_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_monthly_streak",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.bonus?.monthly_streak_point ?? 0}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.bonus.monthly_streak_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_yearly_streak",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.bonus.yearly_streak_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_yearly_streak",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.bonus?.yearly_streak_point ?? 0}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.bonus.yearly_streak_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "bonus_rank_grid",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"
+                },
+                "children": [
+                  {
+                    "id": "field_rank1",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.bonus.rank1_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_rank1",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.bonus?.rank1_point ?? 0}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.bonus.rank1_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_rank2",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.bonus.rank2_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_rank2",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.bonus?.rank2_point ?? 0}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.bonus.rank2_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_rank3",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.bonus.rank3_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_rank3",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.bonus?.rank3_point ?? 0}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.bonus.rank3_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section_time_limit",
+            "name": "Card",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.settings.time_limit.title",
+              "className": "mb-6"
+            },
+            "children": [
+              {
+                "id": "field_time_limit_enabled",
+                "name": "FormField",
+                "type": "composite",
+                "props": {
+                  "label": "$t:yjsoft-attendance.settings.time_limit.enabled"
+                },
+                "children": [
+                  {
+                    "id": "toggle_time_limit",
+                    "name": "Toggle",
+                    "type": "composite",
+                    "props": {
+                      "checked": "{{_local.form?.time_limit?.enabled ?? false}}"
+                    },
+                    "actions": [
+                      {
+                        "type": "change",
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "form.time_limit.enabled": "{{$event.target.checked}}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "time_limit_fields",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "grid grid-cols-2 md:grid-cols-4 gap-4 mt-4"
+                },
+                "children": [
+                  {
+                    "id": "field_start_hour",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.time_limit.start_hour"
+                    },
+                    "children": [
+                      {
+                        "id": "input_start_hour",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "min": 0,
+                          "max": 23,
+                          "value": "{{_local.form?.time_limit?.start_hour ?? 0}}",
+                          "disabled": "{{!_local.form?.time_limit?.enabled}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.time_limit.start_hour": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_start_minute",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.time_limit.start_minute"
+                    },
+                    "children": [
+                      {
+                        "id": "input_start_minute",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "min": 0,
+                          "max": 59,
+                          "value": "{{_local.form?.time_limit?.start_minute ?? 0}}",
+                          "disabled": "{{!_local.form?.time_limit?.enabled}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.time_limit.start_minute": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_end_hour",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.time_limit.end_hour"
+                    },
+                    "children": [
+                      {
+                        "id": "input_end_hour",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "min": 0,
+                          "max": 23,
+                          "value": "{{_local.form?.time_limit?.end_hour ?? 23}}",
+                          "disabled": "{{!_local.form?.time_limit?.enabled}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.time_limit.end_hour": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_end_minute",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.time_limit.end_minute"
+                    },
+                    "children": [
+                      {
+                        "id": "input_end_minute",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "min": 0,
+                          "max": 59,
+                          "value": "{{_local.form?.time_limit?.end_minute ?? 59}}",
+                          "disabled": "{{!_local.form?.time_limit?.enabled}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.time_limit.end_minute": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section_random_point",
+            "name": "Card",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.settings.random_point.title",
+              "className": "mb-6"
+            },
+            "children": [
+              {
+                "id": "field_random_enabled",
+                "name": "FormField",
+                "type": "composite",
+                "props": {
+                  "label": "$t:yjsoft-attendance.settings.random_point.enabled"
+                },
+                "children": [
+                  {
+                    "id": "toggle_random",
+                    "name": "Toggle",
+                    "type": "composite",
+                    "props": {
+                      "checked": "{{_local.form?.random_point?.enabled ?? false}}"
+                    },
+                    "actions": [
+                      {
+                        "type": "change",
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "form.random_point.enabled": "{{$event.target.checked}}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "random_point_fields",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"
+                },
+                "children": [
+                  {
+                    "id": "field_random_min",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.random_point.min_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_random_min",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.random_point?.min_point ?? 1}}",
+                          "disabled": "{{!_local.form?.random_point?.enabled}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.random_point.min_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_random_max",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.random_point.max_point"
+                    },
+                    "children": [
+                      {
+                        "id": "input_random_max",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "value": "{{_local.form?.random_point?.max_point ?? 100}}",
+                          "disabled": "{{!_local.form?.random_point?.enabled}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.random_point.max_point": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "field_random_probability",
+                    "name": "FormField",
+                    "type": "composite",
+                    "props": {
+                      "label": "$t:yjsoft-attendance.settings.random_point.probability"
+                    },
+                    "children": [
+                      {
+                        "id": "input_random_probability",
+                        "name": "Input",
+                        "type": "basic",
+                        "props": {
+                          "type": "number",
+                          "min": 1,
+                          "max": 100,
+                          "value": "{{_local.form?.random_point?.probability ?? 30}}",
+                          "disabled": "{{!_local.form?.random_point?.enabled}}",
+                          "className": "w-full"
+                        },
+                        "actions": [
+                          {
+                            "type": "change",
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "form.random_point.probability": "{{Number($event.target.value) || 0}}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "section_greetings",
+            "name": "Card",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.settings.greetings.title",
+              "className": "mb-6"
+            },
+            "children": [
+              {
+                "id": "greetings_list",
+                "name": "Div",
+                "type": "basic",
+                "iteration": {
+                  "source": "{{_local.form?.greetings?.list ?? []}}",
+                  "item_var": "greeting_item",
+                  "index_var": "greeting_index"
+                },
+                "props": {
+                  "className": "flex gap-2 mb-2"
+                },
+                "children": [
+                  {
+                    "id": "greeting_input_{{greeting_index}}",
+                    "name": "Input",
+                    "type": "basic",
+                    "props": {
+                      "value": "{{greeting_item ?? ''}}",
+                      "placeholder": "$t:yjsoft-attendance.settings.greetings.placeholder",
+                      "maxLength": 255,
+                      "className": "flex-1"
+                    },
+                    "actions": [
+                      {
+                        "type": "change",
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "form.greetings.list": "{{_local.form?.greetings?.list?.map((g, i) => i === greeting_index ? $event.target.value : g) ?? []}}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "greeting_delete_btn_{{greeting_index}}",
+                    "name": "Button",
+                    "type": "basic",
+                    "props": {
+                      "text": "$t:yjsoft-attendance.settings.delete",
+                      "type": "button",
+                      "variant": "danger",
+                      "size": "sm",
+                      "disabled": "{{(_local.form?.greetings?.list?.length ?? 0) <= 1}}"
+                    },
+                    "actions": [
+                      {
+                        "type": "click",
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "form.greetings.list": "{{_local.form?.greetings?.list?.filter((_, i) => i !== greeting_index) ?? []}}"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "greeting_add_btn",
+                "name": "Button",
+                "type": "basic",
+                "props": {
+                  "text": "$t:yjsoft-attendance.settings.greetings.add",
+                  "type": "button",
+                  "variant": "secondary",
+                  "size": "sm",
+                  "className": "mt-2"
+                },
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "setState",
+                    "params": {
+                      "target": "local",
+                      "form.greetings.list": "{{[...(_local.form?.greetings?.list ?? []), '']}}"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "save_section",
+            "name": "Div",
+            "type": "basic",
+            "props": {
+              "className": "flex justify-end mt-6"
+            },
+            "children": [
+              {
+                "id": "save_btn",
+                "name": "Button",
+                "type": "basic",
+                "props": {
+                  "text": "$t:yjsoft-attendance.settings.save",
+                  "type": "button",
+                  "variant": "primary",
+                  "size": "lg",
+                  "disabled": "{{_local.isSaving}}"
+                },
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "sequence",
+                    "actions": [
+                      {
+                        "handler": "setState",
+                        "params": {
+                          "target": "local",
+                          "isSaving": true
+                        }
+                      },
+                      {
+                        "handler": "apiCall",
+                        "target": "/api/modules/yjsoft-attendance/admin/settings",
+                        "params": {
+                          "method": "PUT",
+                          "body": "{{_local.form ?? {}}}"
+                        },
+                        "onSuccess": [
+                          {
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "isSaving": false
+                            }
+                          },
+                          {
+                            "handler": "toast",
+                            "params": {
+                              "message": "$t:yjsoft-attendance.settings.save_success",
+                              "type": "success"
+                            }
+                          }
+                        ],
+                        "onError": [
+                          {
+                            "handler": "setState",
+                            "params": {
+                              "target": "local",
+                              "isSaving": false
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

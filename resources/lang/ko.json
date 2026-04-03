@@ -3,12 +3,22 @@
     "title": "출석부",
     "attend_btn": "출석하기",
     "greeting_placeholder": "인삿말을 입력하세요",
-    "already_done": "출석 완료",
+    "already_done": "출첵완료",
     "current_time": "현재 시각",
+    "attend_success": "출석이 완료되었습니다!",
+    "attend_done_message": "출석이 완료되었습니다. 출석은 하루 1회만 참여하실 수 있습니다.",
     "calendar": {
       "title": "출석 달력",
       "attended": "출석",
-      "absent": "결석"
+      "absent": "결석",
+      "future": "미출석",
+      "sun": "일",
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토"
     },
     "streak": {
       "weekly": "주간 개근",
@@ -16,22 +26,53 @@
       "yearly": "연간 개근"
     },
     "rank": {
-      "title": "출석 순위",
+      "title": "오늘의 출석 현황",
       "first": "1등",
       "second": "2등",
-      "third": "3등"
+      "third": "3등",
+      "today_rank": "오늘 순위"
     },
     "detail": {
       "title": "자세히 보기",
-      "base_point": "기본 포인트",
-      "streak_point": "개근 포인트",
-      "rank_point": "순위 포인트",
+      "base_point": "출석점수",
+      "streak_point": "개근점수",
+      "rank_point": "랭킹점수",
       "random_point": "랜덤 포인트",
-      "total_point": "합계 포인트"
+      "total_point": "합계 포인트",
+      "streak_detail_btn": "개근점수 자세히",
+      "rank_detail_btn": "랭킹점수 자세히",
+      "achieved": "달성",
+      "current_streak": "현재 연속 {days}일 출석 중"
+    },
+    "status": {
+      "progress": "진행상태",
+      "available": "출석가능",
+      "closed": "마감",
+      "attended": "출석여부",
+      "not_attended": "미출석",
+      "permission": "출석권한",
+      "logged_in_user": "로그인 사용자"
+    },
+    "list": {
+      "rank": "순위",
+      "time": "출석시각",
+      "greeting": "인삿말",
+      "nickname": "별명",
+      "point": "포인트",
+      "random_point": "랜덤",
+      "streak": "개근",
+      "total_days": "총 출석"
+    },
+    "handler": {
+      "clock_start_failed": "시계를 시작할 수 없습니다."
     }
   },
   "skin": {
-    "title": "스킨 관리"
+    "title": "스킨 관리",
+    "current_skin": "현재 스킨",
+    "default_skin_name": "기본 스킨",
+    "default_skin_description": "출석부 모듈 기본 스킨입니다.",
+    "custom_skin_notice": "커스텀 스킨 업로드 기능은 향후 버전에서 제공될 예정입니다."
   },
   "settings": {
     "title": "출석부 설정",

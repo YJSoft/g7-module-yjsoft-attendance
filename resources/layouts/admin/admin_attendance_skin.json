@@ -1,0 +1,97 @@
+{
+  "layout_name": "admin_attendance_skin",
+  "version": "1.0.0",
+  "extends": "_admin_base",
+  "meta": {
+    "title": "$t:yjsoft-attendance.skin.title",
+    "auth_required": true
+  },
+  "data_sources": [],
+  "state": {},
+  "slots": {
+    "content": [
+      {
+        "id": "skin_page_wrapper",
+        "name": "Div",
+        "type": "basic",
+        "props": {
+          "className": "max-w-4xl mx-auto"
+        },
+        "children": [
+          {
+            "id": "skin_page_header",
+            "name": "PageHeader",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.skin.title"
+            }
+          },
+          {
+            "id": "skin_card",
+            "name": "Card",
+            "type": "composite",
+            "props": {
+              "title": "$t:yjsoft-attendance.skin.current_skin",
+              "className": "mb-6"
+            },
+            "children": [
+              {
+                "id": "skin_default_info",
+                "name": "Div",
+                "type": "basic",
+                "props": {
+                  "className": "flex items-center gap-4 p-4"
+                },
+                "children": [
+                  {
+                    "id": "skin_icon",
+                    "name": "Icon",
+                    "type": "basic",
+                    "props": {
+                      "name": "fa-palette",
+                      "className": "text-3xl text-blue-500 dark:text-blue-400"
+                    }
+                  },
+                  {
+                    "id": "skin_info_text",
+                    "name": "Div",
+                    "type": "basic",
+                    "children": [
+                      {
+                        "id": "skin_name",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.skin.default_skin_name",
+                          "className": "block text-lg font-semibold text-gray-800 dark:text-gray-100"
+                        }
+                      },
+                      {
+                        "id": "skin_desc",
+                        "name": "Span",
+                        "type": "basic",
+                        "props": {
+                          "text": "$t:yjsoft-attendance.skin.default_skin_description",
+                          "className": "block text-sm text-gray-500 dark:text-gray-400 mt-1"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "skin_notice",
+            "name": "Alert",
+            "type": "composite",
+            "props": {
+              "type": "info",
+              "message": "$t:yjsoft-attendance.skin.custom_skin_notice"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

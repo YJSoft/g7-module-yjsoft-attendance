@@ -294,19 +294,19 @@
 
 ## 4A.8 단계 완료 체크리스트
 
-- [ ] `resources/layouts/admin/admin_attendance_settings.json` 작성
-  - [ ] `data_sources` 정의
-  - [ ] 기본 설정 섹션 (자동출석)
-  - [ ] 포인트/보너스 설정 섹션
-  - [ ] 출석 가능 시간 설정 섹션
-  - [ ] 랜덤 포인트 설정 섹션
-  - [ ] 기본 인삿말 목록 편집 UI
-  - [ ] 출석 권한 설정 섹션 (모드 + 역할 목록)
-  - [ ] 저장 버튼 액션
-- [ ] `resources/layouts/admin/admin_attendance_skin.json` 작성
-- [ ] `resources/routes/admin.json` 작성
-- [ ] 모든 데이터 바인딩 fallback(`??`) 적용 확인
-- [ ] `options` prop fallback 적용 확인 (`options ?? []`)
-- [ ] `Button` 컴포넌트에 `type="button"` 명시 확인 (Form 내부 submit 방지)
-- [ ] `item`, `index` 대신 `item_var`, `index_var` 사용 확인
-- [ ] 다크 모드 클래스 적용 확인
+- [x] `resources/layouts/admin/admin_attendance_settings.json` 작성
+  - [x] `data_sources` 정의
+  - [x] 기본 설정 섹션 (자동출석)
+  - [x] 포인트/보너스 설정 섹션
+  - [x] 출석 가능 시간 설정 섹션
+  - [x] 랜덤 포인트 설정 섹션
+  - [x] 기본 인삿말 목록 편집 UI
+  - [ ] 출석 권한 설정 섹션 (모드 + 역할 목록) — N/A: 백엔드 settings에 permission 카테고리 없음. 권한은 module.php getPermissions()와 라우트 미들웨어로 관리됨.
+  - [x] 저장 버튼 액션
+- [x] `resources/layouts/admin/admin_attendance_skin.json` 작성
+- [x] `resources/routes/admin.json` 작성
+- [x] 모든 데이터 바인딩 fallback(`??`) 적용 확인
+- [x] `options` prop fallback 적용 확인 (`options ?? []`) — Select 컴포넌트 미사용으로 해당 없음
+- [x] `Button` 컴포넌트에 `type="button"` 명시 확인 (Form 내부 submit 방지)
+- [x] `item`, `index` 대신 `item_var`, `index_var` 사용 확인
+- [x] 다크 모드 클래스 적용 확인 — Admin 레이아웃은 composite 컴포넌트(Card, FormField, PageHeader, Toggle, Alert)가 자체적으로 다크 모드를 처리함
