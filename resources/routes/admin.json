@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "routes": [
     {
-      "path": "*/admin/yjsoft-attendance/settings",
+      "path": "*/admin/attendance/settings",
       "layout": "admin_attendance_settings",
       "auth_required": true,
       "meta": {
@@ -10,7 +10,7 @@
       }
     },
     {
-      "path": "*/admin/yjsoft-attendance/skin",
+      "path": "*/admin/attendance/skin",
       "layout": "admin_attendance_skin",
       "auth_required": true,
       "meta": {
