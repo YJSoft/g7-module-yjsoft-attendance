@@ -271,9 +271,9 @@ class AttendanceServiceTest extends ModuleTestCase
             ->with('time_limit.enabled', false)
             ->andReturn(false);
 
-        // checkTimeLimit은 예외 없이 통과해야 함
+        // checkTimeLimit이 예외 없이 통과해야 함 — 예외 발생 시 테스트 실패
         $this->service->checkTimeLimit();
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 
     /**

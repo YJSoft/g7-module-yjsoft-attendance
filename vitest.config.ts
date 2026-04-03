@@ -4,6 +4,8 @@ import fs from 'fs';
 
 // 프로젝트 루트를 동적으로 탐색 (artisan 파일 기준)
 // _bundled와 활성 디렉토리 모두에서 동작합니다.
+// fallback: G7 코어에서 모듈은 modules/_bundled/{id}/ 에 위치하므로
+// 프로젝트 루트는 2단계 상위 (../../) 입니다.
 function findProjectRoot(startDir: string): string {
     let dir = startDir;
     while (dir !== path.dirname(dir)) {
