@@ -60,8 +60,6 @@
 |-------------|---------|
 | `test_attend_success` | 정상 출석 처리 |
 | `test_attend_duplicate_throws` | 오늘 이미 출석 시 `AlreadyAttendedException` 발생 |
-| `test_attend_whitelist_blocked` | 화이트리스트 모드에서 허용되지 않은 역할 → `AttendanceNotAllowedException` |
-| `test_attend_blacklist_blocked` | 블랙리스트 모드에서 금지된 역할 → `AttendanceNotAllowedException` |
 | `test_attend_time_not_allowed` | 출석 가능 시간 외 → `AttendanceTimeNotAllowedException` |
 | `test_attend_time_allowed` | 출석 가능 시간 내 → 정상 처리 |
 | `test_attend_no_time_limit` | 시간 제한 미사용 시 항상 허용 |
@@ -280,7 +278,6 @@ export default defineConfig({
   - [ ] 월을 걸친 연속 출석은 개근 미달성 검증
 - [ ] `AttendanceServiceTest` 작성 및 통과
   - [ ] 중복 출석 방지 검증
-  - [ ] 화이트리스트/블랙리스트 모드 검증
   - [ ] 시간 제한 로직 검증
 - [ ] `AttendanceStreakServiceTest` 작성 및 통과
 - [ ] `AttendanceRankServiceTest` 작성 및 통과

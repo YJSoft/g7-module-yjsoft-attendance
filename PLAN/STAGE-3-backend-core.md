@@ -91,23 +91,16 @@
 출석 처리의 핵심 메서드. 다음 순서로 처리한다:
 
 1. **중복 출석 확인**: `findTodayByUser()` → 이미 출석이면 예외 발생
-2. **권한 확인**: `checkAccessControl($userId)` — 설정된 화이트리스트/블랙리스트 기준으로 출석 가능 여부 확인
-3. **시간 제한 확인**: `checkTimeLimit()` — 현재 시각이 출석 가능 시간대인지 확인
-4. **기본 포인트 결정**: 설정의 `base_point` 값 사용
-5. **랜덤 포인트 결정**: 설정 `random_point.enabled`가 true이면 확률에 따라 랜덤 포인트 산정
-6. **순위 결정**: `AttendanceRankService::getTodayRank($userId)` — 현재 몇 번째 출석인지 계산 (1~3위 보너스 대상 판별)
-7. **개근 보너스 결정**: `AttendanceStreakService::calculateStreakBonus($userId)` — 오늘 출석으로 개근이 달성되는지 미리 계산
-8. **출석 기록 저장**: `createRecord()`
-9. **개근 현황 업데이트**: `AttendanceStreakService::updateStreaks($userId, $today)`
-10. **순위 기록 갱신**: `AttendanceRankService::updateDailyRank($userId, $record)`
-11. **포인트 지급**: 코어 포인트 API 또는 훅을 통해 총 포인트(기본 + 개근보너스 + 순위보너스 + 랜덤) 지급
-12. **결과 반환**: 생성된 `AttendanceRecord` 반환
-
-### checkAccessControl(int $userId): void
-
-- `access_control.mode`가 `whitelist`이면: 유저의 역할(Role)이 허용 목록에 포함되어야 함
-- `access_control.mode`가 `blacklist`이면: 유저의 역할(Role)이 금지 목록에 없어야 함
-- 통과 실패 시 `AttendanceNotAllowedException` 발생
+2. **시간 제한 확인**: `checkTimeLimit()` — 현재 시각이 출석 가능 시간대인지 확인
+3. **기본 포인트 결정**: 설정의 `base_point` 값 사용
+4. **랜덤 포인트 결정**: 설정 `random_point.enabled`가 true이면 확률에 따라 랜덤 포인트 산정
+5. **순위 결정**: `AttendanceRankService::getTodayRank($userId)` — 현재 몇 번째 출석인지 계산 (1~3위 보너스 대상 판별)
+6. **개근 보너스 결정**: `AttendanceStreakService::calculateStreakBonus($userId)` — 오늘 출석으로 개근이 달성되는지 미리 계산
+7. **출석 기록 저장**: `createRecord()`
+8. **개근 현황 업데이트**: `AttendanceStreakService::updateStreaks($userId, $today)`
+9. **순위 기록 갱신**: `AttendanceRankService::updateDailyRank($userId, $record)`
+10. **포인트 지급**: 코어 포인트 API 또는 훅을 통해 총 포인트(기본 + 개근보너스 + 순위보너스 + 랜덤) 지급
+11. **결과 반환**: 생성된 `AttendanceRecord` 반환
 
 ### checkTimeLimit(): void
 

@@ -260,8 +260,7 @@ public function getPermissions(): array
       "bonus",
       "time_limit",
       "random_point",
-      "greetings",
-      "access_control"
+      "greetings"
     ]
   },
   "defaults": {
@@ -298,10 +297,6 @@ public function getPermissions(): array
         "오늘도 출첵!",
         "좋은하루 되세요"
       ]
-    },
-    "access_control": {
-      "mode": "whitelist",
-      "roles": ["user"]
     }
   },
   "frontend_schema": {
@@ -314,8 +309,7 @@ public function getPermissions(): array
     "bonus": { "expose": true },
     "time_limit": { "expose": true },
     "random_point": { "expose": true },
-    "greetings": { "expose": true },
-    "access_control": { "expose": true }
+    "greetings": { "expose": true }
   }
 }
 ```
@@ -329,7 +323,6 @@ public function getPermissions(): array
 | `time_limit` | 출석 가능 시간대 설정 |
 | `random_point` | 랜덤 추가 포인트 설정 |
 | `greetings` | 기본 인삿말 목록 |
-| `access_control` | 출석 허용/금지 권한 설정 (화이트리스트/블랙리스트) |
 
 ---
 

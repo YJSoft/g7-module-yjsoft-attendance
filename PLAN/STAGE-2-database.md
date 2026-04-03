@@ -194,20 +194,6 @@ enum StreakType: string
 }
 ```
 
-### `AccessControlMode` (PHP Backed Enum)
-
-```php
-<?php
-
-namespace Modules\Yjsoft\Attendance\Enums;
-
-enum AccessControlMode: string
-{
-    case Whitelist = 'whitelist';
-    case Blacklist = 'blacklist';
-}
-```
-
 ---
 
 ## 2.6 마이그레이션 순서

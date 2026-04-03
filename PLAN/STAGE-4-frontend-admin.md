@@ -196,31 +196,6 @@
 > **규칙**: iteration에서 `item`, `index` 키 사용 금지. `item_var`, `index_var` 필수.  
 > 참고: [AGENTS.md CRITICAL RULES](https://github.com/gnuboard/g7/blob/main/AGENTS.md)
 
-### 섹션 6: 출석 권한 설정 (access_control)
-
-| 설정 | UI | 필드 키 |
-|------|-----|--------|
-| 모드 | Radio 또는 Select | `form.access_control.mode` |
-| 역할(Role) 목록 | 태그 입력 또는 체크박스 | `form.access_control.roles` |
-
-- 모드: `whitelist` (허용 역할 지정) / `blacklist` (금지 역할 지정)
-- 기본값: `whitelist` 모드, `["user"]` 역할 허용
-- 역할 목록은 코어 API에서 조회하여 선택지로 제공
-
-```json
-{
-  "id": "roles_data_source",
-  "type": "api",
-  "method": "GET",
-  "endpoint": "/api/admin/roles",
-  "auto_fetch": true,
-  "auth_required": true
-}
-```
-
-역할 목록은 Select 또는 다중 체크박스로 표시.  
-`options` prop에 fallback 필수: `options={{roles_data?.data ?? []}}`
-
 ---
 
 ## 4A.5 저장 버튼 액션

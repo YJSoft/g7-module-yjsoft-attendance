@@ -47,7 +47,6 @@ Base: AuthBaseController
 - 성공: `AttendanceResource`와 함께 `success()` 반환
 - 예외 처리:
   - `AlreadyAttendedException` → `error('yjsoft-attendance::messages.already_attended', 409)`
-  - `AttendanceNotAllowedException` → `forbidden('yjsoft-attendance::messages.not_allowed')`
   - `AttendanceTimeNotAllowedException` → `forbidden('yjsoft-attendance::messages.time_not_allowed')`
 
 #### `status(Request $request): JsonResponse`
@@ -144,9 +143,6 @@ Base: AdminBaseController
 | `random_point.probability` | `sometimes\|integer\|between:1,100` |
 | `greetings.list` | `sometimes\|array\|min:1` |
 | `greetings.list.*` | `string\|max:255` |
-| `access_control.mode` | `sometimes\|in:whitelist,blacklist` |
-| `access_control.roles` | `sometimes\|array` |
-| `access_control.roles.*` | `string` |
 
 ---
 
