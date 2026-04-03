@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Yjsoft\Attendance\Http\Controllers\Api\Auth\AttendanceController;
+use Modules\Yjsoft\Attendance\Http\Controllers\Api\Admin\AttendanceSettingsController;
+use Modules\Yjsoft\Attendance\Http\Controllers\Api\Admin\AttendanceStatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,12 +16,40 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// 관리자 라우트
-Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
-    // 설정 API (Stage 3에서 컨트롤러 구현)
-});
+// 인증 사용자 전용
+Route::prefix('auth')
+    ->middleware(['auth:sanctum'])
+    ->group(function () {
+        Route::post('/attend', [AttendanceController::class, 'attend'])
+            ->middleware('permission:yjsoft-attendance.attend')
+            ->name('auth.attend');
 
-// 인증 사용자 라우트
-Route::prefix('auth')->middleware(['auth:sanctum'])->group(function () {
-    // 출석 API (Stage 3에서 컨트롤러 구현)
-});
+        Route::get('/status', [AttendanceController::class, 'status'])
+            ->name('auth.status');
+
+        Route::get('/list', [AttendanceController::class, 'list'])
+            ->name('auth.list');
+
+        Route::get('/random-greeting', [AttendanceController::class, 'randomGreeting'])
+            ->name('auth.random-greeting');
+
+        Route::get('/settings', [AttendanceController::class, 'publicSettings'])
+            ->name('auth.settings');
+    });
+
+// 관리자 전용
+Route::prefix('admin')
+    ->middleware(['auth:sanctum', 'admin'])
+    ->group(function () {
+        Route::get('/settings', [AttendanceSettingsController::class, 'index'])
+            ->middleware('permission:yjsoft-attendance.admin.settings')
+            ->name('admin.settings.index');
+
+        Route::put('/settings', [AttendanceSettingsController::class, 'update'])
+            ->middleware('permission:yjsoft-attendance.admin.settings')
+            ->name('admin.settings.update');
+
+        Route::get('/stats', [AttendanceStatsController::class, 'index'])
+            ->middleware('permission:yjsoft-attendance.admin.view')
+            ->name('admin.stats.index');
+    });
