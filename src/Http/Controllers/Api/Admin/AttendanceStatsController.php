@@ -6,12 +6,12 @@ use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Api\Base\AdminBaseController;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Modules\Yjsoft\Attendance\Contracts\AttendanceRepositoryInterface;
+use Modules\Yjsoft\Attendance\Services\AttendanceService;
 
 class AttendanceStatsController extends AdminBaseController
 {
     public function __construct(
-        private AttendanceRepositoryInterface $attendanceRepository
+        private AttendanceService $attendanceService
     ) {
         parent::__construct();
     }
@@ -23,7 +23,7 @@ class AttendanceStatsController extends AdminBaseController
     {
         $today = Carbon::today();
 
-        $todayCount = $this->attendanceRepository->getTodayCount();
+        $todayCount = $this->attendanceService->getTodayCount();
 
         return ResponseHelper::success('messages.success', [
             'today_count' => $todayCount,

@@ -5,6 +5,7 @@ namespace Modules\Yjsoft\Attendance\Tests\Unit\Services;
 use Carbon\Carbon;
 use Mockery;
 use Modules\Yjsoft\Attendance\Contracts\AttendanceRepositoryInterface;
+use Modules\Yjsoft\Attendance\Contracts\AttendanceStreakRepositoryInterface;
 use Modules\Yjsoft\Attendance\Exceptions\AlreadyAttendedException;
 use Modules\Yjsoft\Attendance\Exceptions\AttendanceTimeNotAllowedException;
 use Modules\Yjsoft\Attendance\Models\AttendanceRecord;
@@ -18,6 +19,7 @@ class AttendanceServiceTest extends ModuleTestCase
 {
     private AttendanceService $service;
     private $mockRepository;
+    private $mockStreakRepository;
     private $mockStreakService;
     private $mockRankService;
     private $mockSettingsService;
@@ -27,12 +29,14 @@ class AttendanceServiceTest extends ModuleTestCase
         parent::setUp();
 
         $this->mockRepository = Mockery::mock(AttendanceRepositoryInterface::class);
+        $this->mockStreakRepository = Mockery::mock(AttendanceStreakRepositoryInterface::class);
         $this->mockStreakService = Mockery::mock(AttendanceStreakService::class);
         $this->mockRankService = Mockery::mock(AttendanceRankService::class);
         $this->mockSettingsService = Mockery::mock(AttendanceSettingsService::class);
 
         $this->service = new AttendanceService(
             $this->mockRepository,
+            $this->mockStreakRepository,
             $this->mockStreakService,
             $this->mockRankService,
             $this->mockSettingsService
