@@ -26,6 +26,12 @@ return [
         'random_bonus'  => '랜덤 추가 포인트',
     ],
 
+    'access_control' => [
+        'disabled'      => '자동출석 비활성화',
+        'on_login'      => '로그인 시 자동출석',
+        'on_auto_login' => '자동로그인 시 자동출석',
+    ],
+
     'validation' => [
         'greeting_required' => '인삿말을 입력해 주세요.',
         'greeting_max'      => '인삿말은 최대 :max자까지 입력할 수 있습니다.',
