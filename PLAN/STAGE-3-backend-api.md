@@ -184,6 +184,10 @@ URL prefix 자동 적용: `/api/modules/yjsoft-attendance`
 Name prefix 자동 적용: `api.modules.yjsoft-attendance.`  
 미들웨어: `['auth:sanctum']`
 
+> **출석 권한 체크**: `/auth/attend` 라우트는 `permission:yjsoft-attendance.attend` 미들웨어를 추가로 적용한다.  
+> `yjsoft-attendance.attend` permission이 부여된 Role(기본: `user`)을 가진 사용자만 출석할 수 있다.  
+> permission이 없는 사용자는 미들웨어 레벨에서 **403**이 반환되며, 서비스 레이어는 호출되지 않는다.
+
 | Method | URI (파일 내 정의) | 컨트롤러 메서드 | 파일 내 name() | 최종 라우트명 |
 |--------|------------------|--------------|--------------|------------|
 | POST | `/auth/attend` | `AttendanceController@attend` | `auth.attend` | `api.modules.yjsoft-attendance.auth.attend` |
@@ -228,6 +232,7 @@ Route::prefix('auth')
     ->middleware(['auth:sanctum'])
     ->group(function () {
         Route::post('/attend', [AttendanceController::class, 'attend'])
+            ->middleware('permission:yjsoft-attendance.attend')  // 출석 권한 체크
             ->name('auth.attend');          // 최종: api.modules.yjsoft-attendance.auth.attend
 
         Route::get('/status', [AttendanceController::class, 'status'])

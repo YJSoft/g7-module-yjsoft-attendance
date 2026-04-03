@@ -107,7 +107,7 @@
 | `test_attend_requires_auth` | 미인증 접근 시 401 |
 | `test_attend_success_returns_200` | 정상 출석 시 200 반환 |
 | `test_attend_duplicate_returns_409` | 오늘 이미 출석 시 409 반환 |
-| `test_attend_not_allowed_returns_403` | 권한 없는 사용자 403 반환 |
+| `test_attend_not_allowed_returns_403` | `yjsoft-attendance.attend` permission 없는 사용자 → permission 미들웨어가 403 반환 |
 | `test_attend_time_not_allowed_returns_403` | 시간 외 출석 시도 403 반환 |
 | `test_status_returns_monthly_calendar` | status API가 이번 달 달력 데이터 반환 |
 | `test_list_returns_paginated_result` | 목록 API가 페이지네이션 결과 반환 |

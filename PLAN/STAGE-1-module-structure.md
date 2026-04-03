@@ -348,7 +348,6 @@ public function getPermissions(): array
 return [
     'attend_success'         => '출석이 완료되었습니다.',
     'already_attended'       => '오늘 이미 출석하셨습니다.',
-    'not_allowed'            => '출석 권한이 없습니다.',
     'time_not_allowed'       => '현재 출석 가능 시간이 아닙니다.',
     'settings_saved'         => '설정이 저장되었습니다.',
     'settings_fetch_success' => '설정을 불러왔습니다.',

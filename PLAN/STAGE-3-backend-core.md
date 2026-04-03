@@ -90,6 +90,10 @@
 
 출석 처리의 핵심 메서드. 다음 순서로 처리한다:
 
+> **권한 체크**: 이 메서드가 호출되기 전에 라우트의 `permission:yjsoft-attendance.attend` 미들웨어가 권한을 검사한다.  
+> `yjsoft-attendance.attend` permission이 없는 사용자는 서비스 레이어 호출 전에 403으로 차단된다.  
+> 출석 허용 Role 관리 = `yjsoft-attendance.attend` permission에 어떤 Role을 연결하느냐로 제어한다.
+
 1. **중복 출석 확인**: `findTodayByUser()` → 이미 출석이면 예외 발생
 2. **시간 제한 확인**: `checkTimeLimit()` — 현재 시각이 출석 가능 시간대인지 확인
 3. **기본 포인트 결정**: 설정의 `base_point` 값 사용
@@ -187,8 +191,9 @@
 | 예외 클래스 | 발생 조건 | HTTP 상태 |
 |------------|---------|----------|
 | `AlreadyAttendedException` | 오늘 이미 출석 | 409 |
-| `AttendanceNotAllowedException` | 권한 없음 | 403 |
 | `AttendanceTimeNotAllowedException` | 출석 가능 시간 아님 | 403 |
+
+> **권한 없음(403)**: `yjsoft-attendance.attend` permission이 없는 사용자는 `permission` 미들웨어가 직접 403을 반환한다. 서비스 레이어까지 도달하지 않으므로 별도 예외 클래스 불필요.
 
 각 예외의 메시지는 `__('yjsoft-attendance::messages.xxx')` 형태로 다국어 처리한다.
 

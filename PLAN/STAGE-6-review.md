@@ -118,7 +118,6 @@ return [
     // 출석 처리
     'attend_success'            => '출석이 완료되었습니다.',
     'already_attended'          => '오늘 이미 출석하셨습니다.',
-    'not_allowed'               => '출석 권한이 없습니다.',
     'time_not_allowed'          => '현재 출석 가능 시간이 아닙니다.',
     'attend_fetch_success'      => '출석 정보를 불러왔습니다.',
     'list_fetch_success'        => '출석자 목록을 불러왔습니다.',
