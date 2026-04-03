@@ -24,7 +24,7 @@
 ## 1.2 디렉토리 구조
 
 ```
-modules/_bundled/yjsoft-attendance/
+/
 ├── module.json                          # 메타데이터 SSoT
 ├── module.php                           # AbstractModule 구현
 ├── LICENSE                              # 라이선스 전문
