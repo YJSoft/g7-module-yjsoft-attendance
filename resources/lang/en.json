@@ -30,6 +30,9 @@
       "total_point": "Total Points"
     }
   },
+  "skin": {
+    "title": "Skin Management"
+  },
   "settings": {
     "title": "Attendance Settings",
     "save": "Save Settings",

@@ -14,7 +14,7 @@
       "layout": "admin_attendance_skin",
       "auth_required": true,
       "meta": {
-        "title": "$t:yjsoft-attendance.settings.title"
+        "title": "$t:yjsoft-attendance.skin.title"
       }
     }
   ]

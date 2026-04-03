@@ -30,6 +30,9 @@
       "total_point": "합계 포인트"
     }
   },
+  "skin": {
+    "title": "스킨 관리"
+  },
   "settings": {
     "title": "출석부 설정",
     "save": "설정 저장",
