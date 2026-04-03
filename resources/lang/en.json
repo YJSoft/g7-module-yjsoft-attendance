@@ -1,0 +1,75 @@
+{
+  "attendance": {
+    "title": "Attendance",
+    "attend_btn": "Check In",
+    "greeting_placeholder": "Enter your greeting",
+    "already_done": "Already Checked In",
+    "current_time": "Current Time",
+    "calendar": {
+      "title": "Attendance Calendar",
+      "attended": "Present",
+      "absent": "Absent"
+    },
+    "streak": {
+      "weekly": "Weekly Streak",
+      "monthly": "Monthly Streak",
+      "yearly": "Yearly Streak"
+    },
+    "rank": {
+      "title": "Attendance Ranking",
+      "first": "1st",
+      "second": "2nd",
+      "third": "3rd"
+    },
+    "detail": {
+      "title": "Details",
+      "base_point": "Base Points",
+      "streak_point": "Streak Points",
+      "rank_point": "Rank Points",
+      "random_point": "Random Points",
+      "total_point": "Total Points"
+    }
+  },
+  "settings": {
+    "title": "Attendance Settings",
+    "save": "Save Settings",
+    "save_success": "Settings have been saved.",
+    "delete": "Delete",
+    "general": {
+      "title": "General Settings",
+      "auto_attend": "Auto Attendance",
+      "auto_attend_description": "Automatically check in on login/auto-login"
+    },
+    "bonus": {
+      "title": "Bonus Settings",
+      "base_point": "Base Attendance Points",
+      "weekly_streak_point": "Weekly Streak Bonus",
+      "monthly_streak_point": "Monthly Streak Bonus",
+      "yearly_streak_point": "Yearly Streak Bonus",
+      "rank1_point": "1st Place Bonus",
+      "rank2_point": "2nd Place Bonus",
+      "rank3_point": "3rd Place Bonus"
+    },
+    "time_limit": {
+      "title": "Time Limit Settings",
+      "enabled": "Enable Time Limit",
+      "start_hour": "Start Hour",
+      "start_minute": "Start Minute",
+      "end_hour": "End Hour",
+      "end_minute": "End Minute"
+    },
+    "random_point": {
+      "title": "Random Points Settings",
+      "enabled": "Enable Random Points",
+      "min_point": "Minimum Points",
+      "max_point": "Maximum Points",
+      "probability": "Probability (%)"
+    },
+    "greetings": {
+      "title": "Default Greetings",
+      "list": "Greeting List",
+      "add": "Add Greeting",
+      "placeholder": "Enter a greeting"
+    }
+  }
+}

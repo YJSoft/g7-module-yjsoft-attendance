@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "routes": [
+    {
+      "path": "*/yjsoft-attendance",
+      "layout": "user_attendance_index",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:yjsoft-attendance.attendance.title"
+      }
+    }
+  ]
+}

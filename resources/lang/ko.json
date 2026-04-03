@@ -1,0 +1,75 @@
+{
+  "attendance": {
+    "title": "출석부",
+    "attend_btn": "출석하기",
+    "greeting_placeholder": "인삿말을 입력하세요",
+    "already_done": "출석 완료",
+    "current_time": "현재 시각",
+    "calendar": {
+      "title": "출석 달력",
+      "attended": "출석",
+      "absent": "결석"
+    },
+    "streak": {
+      "weekly": "주간 개근",
+      "monthly": "월간 개근",
+      "yearly": "연간 개근"
+    },
+    "rank": {
+      "title": "출석 순위",
+      "first": "1등",
+      "second": "2등",
+      "third": "3등"
+    },
+    "detail": {
+      "title": "자세히 보기",
+      "base_point": "기본 포인트",
+      "streak_point": "개근 포인트",
+      "rank_point": "순위 포인트",
+      "random_point": "랜덤 포인트",
+      "total_point": "합계 포인트"
+    }
+  },
+  "settings": {
+    "title": "출석부 설정",
+    "save": "설정 저장",
+    "save_success": "설정이 저장되었습니다.",
+    "delete": "삭제",
+    "general": {
+      "title": "기본 설정",
+      "auto_attend": "자동출석",
+      "auto_attend_description": "로그인/자동로그인 시 자동으로 출석 처리"
+    },
+    "bonus": {
+      "title": "보너스 설정",
+      "base_point": "기본 출석 포인트",
+      "weekly_streak_point": "주간 개근 보너스",
+      "monthly_streak_point": "월간 개근 보너스",
+      "yearly_streak_point": "연간 개근 보너스",
+      "rank1_point": "1등 보너스",
+      "rank2_point": "2등 보너스",
+      "rank3_point": "3등 보너스"
+    },
+    "time_limit": {
+      "title": "출석 시간 설정",
+      "enabled": "출석 시간 제한 사용",
+      "start_hour": "시작 시",
+      "start_minute": "시작 분",
+      "end_hour": "종료 시",
+      "end_minute": "종료 분"
+    },
+    "random_point": {
+      "title": "랜덤 포인트 설정",
+      "enabled": "랜덤 포인트 사용",
+      "min_point": "최소 포인트",
+      "max_point": "최대 포인트",
+      "probability": "지급 확률 (%)"
+    },
+    "greetings": {
+      "title": "기본 인삿말 설정",
+      "list": "인삿말 목록",
+      "add": "인삿말 추가",
+      "placeholder": "인삿말을 입력하세요"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "routes": [
+    {
+      "path": "*/admin/yjsoft-attendance/settings",
+      "layout": "admin_attendance_settings",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:yjsoft-attendance.settings.title"
+      }
+    },
+    {
+      "path": "*/admin/yjsoft-attendance/skin",
+      "layout": "admin_attendance_skin",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:yjsoft-attendance.settings.title"
+      }
+    }
+  ]
+}
