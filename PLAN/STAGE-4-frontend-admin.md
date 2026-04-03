@@ -272,22 +272,35 @@
 
 ```json
 {
+  "version": "1.0.0",
   "routes": [
     {
-      "path": "/admin/yjsoft-attendance/settings",
-      "layout_name": "yjsoft-attendance.admin_attendance_settings",
-      "permissions": ["yjsoft-attendance.admin.settings"]
+      "path": "*/admin/yjsoft-attendance/settings",
+      "layout": "admin_attendance_settings",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:yjsoft-attendance.settings.title"
+      }
     },
     {
-      "path": "/admin/yjsoft-attendance/skin",
-      "layout_name": "yjsoft-attendance.admin_attendance_skin",
-      "permissions": ["yjsoft-attendance.admin.view"]
+      "path": "*/admin/yjsoft-attendance/skin",
+      "layout": "admin_attendance_skin",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:yjsoft-attendance.settings.skin_title"
+      }
     }
   ]
 }
 ```
 
 파일 위치: `resources/routes/admin.json`
+
+> **규칙**: `layout` 필드 값에 moduleIdentifier 접두사를 직접 작성하지 않는다.  
+> 시스템이 자동으로 `yjsoft-attendance.` 접두사를 추가하여 최종 레이아웃명이 결정된다.  
+> **금지**: `"layout_name"` 키 사용 — 올바른 키는 `"layout"`.  
+> **금지**: `"layout": "yjsoft-attendance.admin_attendance_settings"` — 이중 적용됨.  
+> 참고: [module-routing.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-routing.md)
 
 ---
 

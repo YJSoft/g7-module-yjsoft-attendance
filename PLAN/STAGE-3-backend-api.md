@@ -178,32 +178,35 @@ Base: AdminBaseController
 경로: src/routes/api.php
 ```
 
-> **규칙**: 모든 라우트에 `name()` 필수. 접두사 `yjsoft-attendance.` 사용.  
-> 참고: [routing.md](https://github.com/gnuboard/g7/blob/main/docs/backend/routing.md)
+> **규칙**: `ModuleRouteServiceProvider`가 URL prefix(`api/modules/yjsoft-attendance`)와 name prefix(`api.modules.yjsoft-attendance.`)를 **자동** 적용한다.  
+> 라우트 파일에서는 **모듈 내부 이름만** 정의한다. prefix를 중복 작성하면 안 된다.  
+> 참고: [module-routing.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-routing.md)
 
 ### 인증 사용자 라우트
 
-URL prefix: `/api/modules/yjsoft-attendance`  
+URL prefix 자동 적용: `/api/modules/yjsoft-attendance`  
+Name prefix 자동 적용: `api.modules.yjsoft-attendance.`  
 미들웨어: `['auth:sanctum']`
 
-| Method | URI | 컨트롤러 메서드 | 라우트명 |
-|--------|-----|--------------|---------|
-| POST | `/auth/attend` | `AttendanceController@attend` | `yjsoft-attendance.auth.attend` |
-| GET | `/auth/status` | `AttendanceController@status` | `yjsoft-attendance.auth.status` |
-| GET | `/auth/list` | `AttendanceController@list` | `yjsoft-attendance.auth.list` |
-| GET | `/auth/random-greeting` | `AttendanceController@randomGreeting` | `yjsoft-attendance.auth.random-greeting` |
-| GET | `/auth/settings` | `AttendanceController@publicSettings` | `yjsoft-attendance.auth.settings` |
+| Method | URI (파일 내 정의) | 컨트롤러 메서드 | 파일 내 name() | 최종 라우트명 |
+|--------|------------------|--------------|--------------|------------|
+| POST | `/auth/attend` | `AttendanceController@attend` | `auth.attend` | `api.modules.yjsoft-attendance.auth.attend` |
+| GET | `/auth/status` | `AttendanceController@status` | `auth.status` | `api.modules.yjsoft-attendance.auth.status` |
+| GET | `/auth/list` | `AttendanceController@list` | `auth.list` | `api.modules.yjsoft-attendance.auth.list` |
+| GET | `/auth/random-greeting` | `AttendanceController@randomGreeting` | `auth.random-greeting` | `api.modules.yjsoft-attendance.auth.random-greeting` |
+| GET | `/auth/settings` | `AttendanceController@publicSettings` | `auth.settings` | `api.modules.yjsoft-attendance.auth.settings` |
 
 ### 관리자 라우트
 
-URL prefix: `/api/modules/yjsoft-attendance/admin`  
+URL prefix 자동 적용: `/api/modules/yjsoft-attendance`  
+Name prefix 자동 적용: `api.modules.yjsoft-attendance.`  
 미들웨어: `['auth:sanctum', 'admin']`
 
-| Method | URI | 컨트롤러 메서드 | 라우트명 | 권한 |
-|--------|-----|--------------|---------|-----|
-| GET | `/settings` | `AttendanceSettingsController@index` | `yjsoft-attendance.admin.settings.index` | `yjsoft-attendance.admin.settings` |
-| PUT | `/settings` | `AttendanceSettingsController@update` | `yjsoft-attendance.admin.settings.update` | `yjsoft-attendance.admin.settings` |
-| GET | `/stats` | `AttendanceStatsController@index` | `yjsoft-attendance.admin.stats.index` | `yjsoft-attendance.admin.view` |
+| Method | URI (파일 내 정의) | 컨트롤러 메서드 | 파일 내 name() | 최종 라우트명 |
+|--------|------------------|--------------|--------------|------------|
+| GET | `/admin/settings` | `AttendanceSettingsController@index` | `admin.settings.index` | `api.modules.yjsoft-attendance.admin.settings.index` |
+| PUT | `/admin/settings` | `AttendanceSettingsController@update` | `admin.settings.update` | `api.modules.yjsoft-attendance.admin.settings.update` |
+| GET | `/admin/stats` | `AttendanceStatsController@index` | `admin.stats.index` | `api.modules.yjsoft-attendance.admin.stats.index` |
 
 > **금지**: `FormRequest::authorize()` 메서드에서 권한 체크 금지.  
 > 권한 체크는 `permission` 미들웨어를 라우트에 체인하여 처리.
@@ -213,24 +216,35 @@ URL prefix: `/api/modules/yjsoft-attendance/admin`
 ```php
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Attendance Module API Routes
+|--------------------------------------------------------------------------
+|
+| 주의: ModuleRouteServiceProvider가 자동으로 prefix를 적용합니다.
+| - URL prefix: 'api/modules/yjsoft-attendance'
+| - Name prefix: 'api.modules.yjsoft-attendance.'
+|
+*/
+
 // 인증 사용자 전용
 Route::prefix('auth')
     ->middleware(['auth:sanctum'])
     ->group(function () {
         Route::post('/attend', [AttendanceController::class, 'attend'])
-            ->name('yjsoft-attendance.auth.attend');
+            ->name('auth.attend');          // 최종: api.modules.yjsoft-attendance.auth.attend
 
         Route::get('/status', [AttendanceController::class, 'status'])
-            ->name('yjsoft-attendance.auth.status');
+            ->name('auth.status');
 
         Route::get('/list', [AttendanceController::class, 'list'])
-            ->name('yjsoft-attendance.auth.list');
+            ->name('auth.list');
 
         Route::get('/random-greeting', [AttendanceController::class, 'randomGreeting'])
-            ->name('yjsoft-attendance.auth.random-greeting');
+            ->name('auth.random-greeting');
 
         Route::get('/settings', [AttendanceController::class, 'publicSettings'])
-            ->name('yjsoft-attendance.auth.settings');
+            ->name('auth.settings');
     });
 
 // 관리자 전용
@@ -239,19 +253,21 @@ Route::prefix('admin')
     ->group(function () {
         Route::get('/settings', [AttendanceSettingsController::class, 'index'])
             ->middleware('permission:yjsoft-attendance.admin.settings')
-            ->name('yjsoft-attendance.admin.settings.index');
+            ->name('admin.settings.index');  // 최종: api.modules.yjsoft-attendance.admin.settings.index
 
         Route::put('/settings', [AttendanceSettingsController::class, 'update'])
             ->middleware('permission:yjsoft-attendance.admin.settings')
-            ->name('yjsoft-attendance.admin.settings.update');
+            ->name('admin.settings.update');
 
         Route::get('/stats', [AttendanceStatsController::class, 'index'])
             ->middleware('permission:yjsoft-attendance.admin.view')
-            ->name('yjsoft-attendance.admin.stats.index');
+            ->name('admin.stats.index');
     });
 ```
 
-> 실제 URL prefix(`/api/modules/yjsoft-attendance`)는 모듈 라우팅 시스템이 자동 적용.  
+> **금지**: `->name('api.modules.yjsoft-attendance.auth.attend')` 처럼 prefix를 직접 작성하면 이중 적용됨.  
+> **금지**: `->name('yjsoft-attendance.auth.attend')` 처럼 모듈 식별자를 직접 포함하면 이중 적용됨.  
+> **올바른 방법**: `->name('auth.attend')` — ModuleRouteServiceProvider가 자동으로 `api.modules.yjsoft-attendance.`를 앞에 붙임.  
 > 참고: [module-routing.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-routing.md)
 
 ---

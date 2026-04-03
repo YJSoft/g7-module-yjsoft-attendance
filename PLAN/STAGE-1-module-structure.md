@@ -119,9 +119,21 @@ modules/_bundled/yjsoft-attendance/
   "g7_version": ">=1.0.0",
   "license": "MIT",
   "github_url": "https://github.com/YJSoft/g7-module-yjsoft-attendance",
+  "github_changelog_url": null,
+  "dependencies": {
+    "modules": {},
+    "plugins": {}
+  },
   "assets": {
-    "js": "dist/js/module.iife.js",
-    "css": "dist/css/module.css"
+    "js": {
+      "entry": "resources/js/index.ts",
+      "output": "dist/js/module.iife.js"
+    },
+    "css": {
+      "entry": "resources/css/main.css",
+      "output": "dist/css/module.css"
+    },
+    "handlers": true
   },
   "loading": {
     "strategy": "global",
@@ -129,6 +141,9 @@ modules/_bundled/yjsoft-attendance/
   }
 }
 ```
+
+> **규칙**: `assets.js`와 `assets.css`는 단순 경로 문자열이 아니라 `entry`(소스 엔트리포인트)와 `output`(빌드 출력 경로)을 가진 객체로 작성한다.  
+> 참고: [module-assets.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-assets.md)
 
 ---
 
@@ -145,14 +160,46 @@ modules/_bundled/yjsoft-attendance/
 
 #### `getPermissions()`
 
-| 권한 식별자 | 설명 |
-|------------|------|
-| `yjsoft-attendance.attend` | 출석 실행 권한 |
-| `yjsoft-attendance.admin.settings` | 출석부 설정 관리 권한 |
-| `yjsoft-attendance.admin.view` | 출석 통계 조회 권한 |
+> **규칙**: Permission에는 `type` 필드 필수. `admin`(관리자 화면용) 또는 `user`(사용자 화면용). 기본값: `admin`.  
+> 참고: [permissions.md](https://github.com/gnuboard/g7/blob/main/docs/extension/permissions.md)
 
-`attend` 권한은 소유자 개념 없음 (role-only scope).  
-`admin.*` 권한은 `admin` 역할에만 부여.
+| 권한 식별자 | type | 설명 | 부여 역할 |
+|------------|------|------|--------|
+| `yjsoft-attendance.attend` | `user` | 출석 실행 권한 (사용자 화면용) | `user` |
+| `yjsoft-attendance.admin.settings` | `admin` | 출석부 설정 관리 권한 | `admin` |
+| `yjsoft-attendance.admin.view` | `admin` | 출석 통계 조회 권한 | `admin` |
+
+`attend` 권한은 `type: 'user'`로 설정한다. 이 권한은 사용자(프론트엔드) 화면에서 출석을 수행하는 권한이므로 `user` 타입이어야 한다.  
+`admin.*` 권한은 `type: 'admin'`으로 설정한다.
+
+```php
+public function getPermissions(): array
+{
+    return [
+        [
+            'identifier' => 'yjsoft-attendance.attend',
+            'name'       => ['ko' => '출석하기', 'en' => 'Check Attendance'],
+            'description'=> ['ko' => '출석 기능을 사용할 수 있는 권한', 'en' => 'Permission to use attendance feature'],
+            'type'       => 'user',    // 사용자 화면용 권한
+            'roles'      => ['user'],
+        ],
+        [
+            'identifier' => 'yjsoft-attendance.admin.settings',
+            'name'       => ['ko' => '출석부 설정 관리', 'en' => 'Manage Attendance Settings'],
+            'description'=> ['ko' => '출석부 설정을 변경할 수 있는 권한', 'en' => 'Permission to manage attendance settings'],
+            'type'       => 'admin',   // 관리자 화면용 권한
+            'roles'      => ['admin'],
+        ],
+        [
+            'identifier' => 'yjsoft-attendance.admin.view',
+            'name'       => ['ko' => '출석 통계 조회', 'en' => 'View Attendance Stats'],
+            'description'=> ['ko' => '출석 통계를 조회할 수 있는 권한', 'en' => 'Permission to view attendance statistics'],
+            'type'       => 'admin',   // 관리자 화면용 권한
+            'roles'      => ['admin'],
+        ],
+    ];
+}
+```
 
 #### `getAdminMenus()`
 
@@ -420,4 +467,4 @@ resources/lang/
 - [ ] `src/lang/en/messages.php` 작성
 - [ ] `resources/lang/ko.json` 작성 (중첩 객체 구조, moduleIdentifier 없이 작성)
 - [ ] `resources/lang/en.json` 작성
-- [ ] `php artisan extension:update-autoload` 실행 확인
+- [ ] `php artisan module:install yjsoft-attendance` 실행 확인 (마이그레이션 + 권한/역할/메뉴 자동 등록)

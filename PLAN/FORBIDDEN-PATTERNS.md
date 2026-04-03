@@ -179,6 +179,10 @@
 | 프론트엔드 JSON 키를 플랫 dot-notation으로 작성 (`"attendance.title": "..."`) | 중첩 객체 구조로 작성 (`{ "attendance": { "title": "..." } }`) |
 | 500줄 초과 JSON을 단일 파일로 유지 | `$partial` 디렉티브로 도메인별 분리 |
 
+---
+
+## FP-13(구 FP-13). 테스트 패턴
+
 > 출처: [AGENTS.md — 테스트 프로토콜](https://github.com/gnuboard/g7/blob/main/AGENTS.md)
 
 | ❌ 금지 | ✅ 올바른 방법 |
@@ -186,6 +190,63 @@
 | "인프라 부족"을 이유로 레이아웃 테스트 건너뜀 | `createLayoutTest()` 유틸리티 사용 (브라우저 불필요) |
 | 모듈 테스트에서 루트 vitest.config.ts 포함 | 독립 `vitest.config.ts` 사용 |
 | 기능 구현 후 테스트 미작성 | 기능 구현 = 테스트 코드 작성 필수 |
+
+---
+
+## FP-15. 라우트 name() 이중 prefix 패턴
+
+> 출처: [module-routing.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-routing.md)
+
+| ❌ 금지 | ✅ 올바른 방법 |
+|--------|-------------|
+| `->name('api.modules.yjsoft-attendance.auth.attend')` | `->name('auth.attend')` |
+| `->name('yjsoft-attendance.auth.attend')` | `->name('auth.attend')` |
+| `Route::prefix('api/modules/yjsoft-attendance')` (직접 URL prefix 작성) | prefix 없이 내부 구조만 정의 |
+
+`ModuleRouteServiceProvider`가 URL prefix(`api/modules/{module-name}`)와 name prefix(`api.modules.{module-name}.`)를 자동 적용한다.  
+라우트 파일에서 이 prefix를 중복으로 직접 작성하면 이중 적용된다.
+
+---
+
+## FP-16. 프론트엔드 routes.json 잘못된 필드 및 값
+
+> 출처: [module-routing.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-routing.md)
+
+| ❌ 금지 | ✅ 올바른 방법 |
+|--------|-------------|
+| `"layout_name": "..."` 키 사용 | `"layout": "..."` 키 사용 |
+| `"layout": "yjsoft-attendance.admin_attendance_settings"` (moduleIdentifier 포함) | `"layout": "admin_attendance_settings"` (내부 이름만) |
+| routes.json에 `version` 필드 없음 | `"version": "1.0.0"` 필수 |
+
+시스템이 `layout` 값에 자동으로 moduleIdentifier 접두사를 추가한다.  
+직접 접두사를 작성하면 이중 적용된다.
+
+---
+
+## FP-17. module.json assets 단순 문자열 형태
+
+> 출처: [module-assets.md](https://github.com/gnuboard/g7/blob/main/docs/extension/module-assets.md)
+
+| ❌ 금지 | ✅ 올바른 방법 |
+|--------|-------------|
+| `"assets": { "js": "dist/js/module.iife.js" }` (단순 문자열) | `"assets": { "js": { "entry": "resources/js/index.ts", "output": "dist/js/module.iife.js" } }` |
+| `"assets": { "css": "dist/css/module.css" }` (단순 문자열) | `"assets": { "css": { "entry": "resources/css/main.css", "output": "dist/css/module.css" } }` |
+
+`assets.js`와 `assets.css`는 단순 경로 문자열이 아니라 `entry`(소스 엔트리포인트)와 `output`(빌드 출력 경로)을 가진 객체로 작성해야 한다.
+
+---
+
+## FP-18. Permission type 필드 누락
+
+> 출처: [permissions.md](https://github.com/gnuboard/g7/blob/main/docs/extension/permissions.md)
+
+| ❌ 금지 | ✅ 올바른 방법 |
+|--------|-------------|
+| Permission 정의 시 `type` 필드 누락 (기본값 `admin`으로 처리됨) | 반드시 `type` 명시 (`admin` 또는 `user`) |
+| 사용자(프론트엔드) 화면용 권한에 `type: 'admin'` 지정 | 사용자 화면용 권한은 `type: 'user'` 지정 |
+
+`type: 'user'` 대상: 출석 실행 권한(`yjsoft-attendance.attend`) 등 사용자가 직접 사용하는 기능 권한.  
+`type: 'admin'` 대상: 설정 관리, 통계 조회 등 관리자 화면 권한.
 
 ---
 
