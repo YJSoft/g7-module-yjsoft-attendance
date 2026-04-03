@@ -201,20 +201,20 @@
 
 ## 3.8 단계 완료 체크리스트
 
-- [ ] `AttendanceRecord` 모델 작성
-- [ ] `AttendanceStreak` 모델 작성 (StreakType Enum cast 포함)
-- [ ] `AttendanceDailyRank` 모델 작성
-- [ ] `AttendanceRepositoryInterface` 정의
-- [ ] `AttendanceStreakRepositoryInterface` 정의
-- [ ] `AttendanceRepository` 구현
-- [ ] `AttendanceStreakRepository` 구현
-- [ ] `AttendanceSettingsService` (`ModuleSettingsInterface`) 구현
-- [ ] `AttendanceStreakService` 구현
-  - [ ] 개근 달성 조건 로직 (달력 기준 확인)
-- [ ] `AttendanceRankService` 구현
-- [ ] `AttendanceService` 구현
-  - [ ] 권한 확인 로직
-  - [ ] 시간 제한 확인 로직
-  - [ ] 포인트 지급 로직
-- [ ] Custom Exceptions 작성 (다국어 키 사용)
-- [ ] Service Provider에서 Repository 바인딩 등록
+- [x] `AttendanceRecord` 모델 작성
+- [x] `AttendanceStreak` 모델 작성 (StreakType Enum cast 포함)
+- [x] `AttendanceDailyRank` 모델 작성
+- [x] `AttendanceRepositoryInterface` 정의
+- [x] `AttendanceStreakRepositoryInterface` 정의
+- [x] `AttendanceRepository` 구현
+- [x] `AttendanceStreakRepository` 구현
+- [x] `AttendanceSettingsService` (`ModuleSettingsInterface`) 구현
+- [x] `AttendanceStreakService` 구현
+  - [x] 개근 달성 조건 로직 (달력 기준 확인)
+- [x] `AttendanceRankService` 구현
+- [x] `AttendanceService` 구현
+  - [x] 권한 확인 로직
+  - [x] 시간 제한 확인 로직
+  - [x] 포인트 지급 로직
+- [x] Custom Exceptions 작성 (다국어 키 사용)
+- [x] Service Provider에서 Repository 바인딩 등록

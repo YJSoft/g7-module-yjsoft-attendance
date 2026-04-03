@@ -291,20 +291,20 @@ Route::prefix('admin')
 
 ## 3A.8 단계 완료 체크리스트
 
-- [ ] `AttendanceController` (Auth) 구현
-  - [ ] `attend()` — 출석 처리 + 예외 처리
-  - [ ] `status()` — 오늘 출석 상태 + 달력 데이터
-  - [ ] `list()` — 오늘 출석자 목록 (페이지네이션)
-  - [ ] `randomGreeting()` — 랜덤 인삿말
-  - [ ] `publicSettings()` — 프론트 공개 설정
-- [ ] `AttendanceSettingsController` (Admin) 구현
-- [ ] `AttendanceStatsController` (Admin) 구현
-- [ ] `StoreAttendanceRequest` FormRequest 작성
-- [ ] `UpdateAttendanceSettingsRequest` FormRequest 작성
-- [ ] `AttendanceResource` 작성 (BaseApiResource 상속)
-- [ ] `AttendanceListResource` 작성
-- [ ] `src/routes/api.php` 작성
-  - [ ] 모든 라우트에 `name()` 지정 확인
-  - [ ] 관리자 라우트에 `permission` 미들웨어 체인 확인
-- [ ] `AutoAttendanceListener` 구현
-- [ ] `module.php`에 Hook Listener 등록
+- [x] `AttendanceController` (Auth) 구현
+  - [x] `attend()` — 출석 처리 + 예외 처리
+  - [x] `status()` — 오늘 출석 상태 + 달력 데이터
+  - [x] `list()` — 오늘 출석자 목록 (페이지네이션)
+  - [x] `randomGreeting()` — 랜덤 인삿말
+  - [x] `publicSettings()` — 프론트 공개 설정
+- [x] `AttendanceSettingsController` (Admin) 구현
+- [x] `AttendanceStatsController` (Admin) 구현
+- [x] `StoreAttendanceRequest` FormRequest 작성
+- [x] `UpdateAttendanceSettingsRequest` FormRequest 작성
+- [x] `AttendanceResource` 작성 (BaseApiResource 상속)
+- [x] `AttendanceListResource` 작성
+- [x] `src/routes/api.php` 작성
+  - [x] 모든 라우트에 `name()` 지정 확인
+  - [x] 관리자 라우트에 `permission` 미들웨어 체인 확인
+- [x] `AutoAttendanceListener` 구현
+- [x] `module.php`에 Hook Listener 등록
