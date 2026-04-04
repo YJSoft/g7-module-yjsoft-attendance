@@ -10,6 +10,7 @@
     "outDir": "dist",
     "rootDir": "resources/js",
     "declaration": false,
+    "baseUrl": ".",
     "paths": {
       "@/*": ["resources/js/*"]
     }
