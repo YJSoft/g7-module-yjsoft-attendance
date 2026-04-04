@@ -14,6 +14,20 @@ jobs:
     name: Backend Tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: g7_testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     strategy:
       fail-fast: false
       matrix:
@@ -35,7 +49,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo_sqlite, sqlite3
+          extensions: >-
+            bcmath, ctype, curl, dom, exif, fileinfo, filter, gd,
+            intl, json, mbstring, openssl, pcntl, pdo, pdo_mysql,
+            posix, session, simplexml, sodium, tokenizer, xml,
+            xmlwriter, zip
           coverage: none
 
       - name: Get Composer cache directory
@@ -77,28 +95,25 @@ jobs:
         run: |
           cp .env.example .env || true
           php artisan key:generate --ansi
-          touch database/database.sqlite
 
-      - name: Configure SQLite
+      - name: Configure MySQL for testing
         working-directory: g7
         run: |
           # .env.testing 생성 (G7 코어 bootstrap.php가 필수로 요구)
           cp .env.testing.example .env.testing
-          # .env.testing에서 DB 설정을 SQLite로 변경
-          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env.testing
-          sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)"'/database/database.sqlite|' .env.testing
-          sed -i 's|^DB_WRITE_DATABASE=.*|DB_WRITE_DATABASE='"$(pwd)"'/database/database.sqlite|' .env.testing
-          sed -i 's|^DB_READ_DATABASE=.*|DB_READ_DATABASE='"$(pwd)"'/database/database.sqlite|' .env.testing
-          # 불필요한 DB 호스트/포트/인증 설정 제거
-          sed -i '/^DB_WRITE_HOST=/d' .env.testing
-          sed -i '/^DB_WRITE_PORT=/d' .env.testing
-          sed -i '/^DB_WRITE_USERNAME=/d' .env.testing
-          sed -i '/^DB_WRITE_PASSWORD=/d' .env.testing
-          sed -i '/^DB_READ_HOST=/d' .env.testing
-          sed -i '/^DB_READ_PORT=/d' .env.testing
-          sed -i '/^DB_READ_USERNAME=/d' .env.testing
-          sed -i '/^DB_READ_PASSWORD=/d' .env.testing
-          sed -i '/^DB_PREFIX=/d' .env.testing
+          # MySQL 접속 정보 설정
+          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env.testing
+          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=g7_testing/' .env.testing
+          sed -i 's/^DB_WRITE_DATABASE=.*/DB_WRITE_DATABASE=g7_testing/' .env.testing
+          sed -i 's/^DB_READ_DATABASE=.*/DB_READ_DATABASE=g7_testing/' .env.testing
+          sed -i 's/^DB_WRITE_HOST=.*/DB_WRITE_HOST=127.0.0.1/' .env.testing
+          sed -i 's/^DB_WRITE_PORT=.*/DB_WRITE_PORT=3306/' .env.testing
+          sed -i 's/^DB_WRITE_USERNAME=.*/DB_WRITE_USERNAME=root/' .env.testing
+          sed -i 's/^DB_WRITE_PASSWORD=.*/DB_WRITE_PASSWORD=password/' .env.testing
+          sed -i 's/^DB_READ_HOST=.*/DB_READ_HOST=127.0.0.1/' .env.testing
+          sed -i 's/^DB_READ_PORT=.*/DB_READ_PORT=3306/' .env.testing
+          sed -i 's/^DB_READ_USERNAME=.*/DB_READ_USERNAME=root/' .env.testing
+          sed -i 's/^DB_READ_PASSWORD=.*/DB_READ_PASSWORD=password/' .env.testing
           # APP_KEY 설정 (base64 키에 / 가 포함되므로 # 구분자 사용)
           APP_KEY=$(grep '^APP_KEY=' .env | head -1)
           sed -i "s#^APP_KEY=.*#$APP_KEY#" .env.testing
