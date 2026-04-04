@@ -12,54 +12,54 @@
 
 ### 1단계 — 모듈 기반 구조
 
-- [ ] `module.json` 작성 완료
-- [ ] `module.php` (AbstractModule) 작성 완료
-  - [ ] `getPermissions()`: `attend`, `admin.settings`, `admin.view`
-  - [ ] `getAdminMenus()`: 설정, 스킨 관리 메뉴
-  - [ ] `getHookListeners()`: `AutoAttendanceListener` 등록
-- [ ] `composer.json` 작성 (루트 composer.json 수정 금지 확인)
-- [ ] `config/settings/defaults.json` 작성 (6개 카테고리)
-- [ ] `LICENSE` 파일 포함
-- [ ] 다국어 파일 완료 (`lang/ko/`, `lang/en/`, `resources/lang/ko.json`, `resources/lang/en.json`)
+- [x] `module.json` 작성 완료
+- [x] `module.php` (AbstractModule) 작성 완료
+  - [x] `getPermissions()`: `attend`, `admin.settings`, `admin.view`
+  - [x] `getAdminMenus()`: 설정, 스킨 관리 메뉴
+  - [x] `getHookListeners()`: `AutoAttendanceListener` 등록
+- [x] `composer.json` 작성 (루트 composer.json 수정 금지 확인)
+- [x] `config/settings/defaults.json` 작성 (5개 카테고리: general, bonus, time_limit, random_point, greetings)
+- [x] `LICENSE` 파일 포함
+- [x] 다국어 파일 완료 (`lang/ko/`, `lang/en/`, `resources/lang/ko.json`, `resources/lang/en.json`)
 
 ### 2단계 — 데이터베이스
 
-- [ ] `StreakType` Enum 작성
-- [ ] `AccessControlMode` Enum 작성
-- [ ] 마이그레이션 3개 작성 완료
-- [ ] 마이그레이션 실행 및 롤백 정상 동작 확인
+- [x] `StreakType` Enum 작성
+- [x] `AccessControlMode` Enum 작성
+- [x] 마이그레이션 3개 작성 완료
+- [x] 마이그레이션 실행 및 롤백 정상 동작 확인
 
 ### 3단계 — 백엔드
 
-- [ ] Models (AttendanceRecord, AttendanceStreak, AttendanceDailyRank)
-- [ ] Repository 인터페이스 + 구현체
-- [ ] Service Provider에서 Repository 인터페이스 바인딩
-- [ ] `AttendanceService`: 출석 처리, 권한 확인, 시간 제한, 포인트 지급
-- [ ] `AttendanceStreakService`: 달력 기준 개근 처리
-- [ ] `AttendanceRankService`: 순위 계산 및 기록
-- [ ] `AttendanceSettingsService` (ModuleSettingsInterface 구현)
-- [ ] Custom Exceptions (다국어 메시지 사용)
-- [ ] `AutoAttendanceListener` 구현
-- [ ] 컨트롤러 3개 (Auth 출석, Admin 설정, Admin 통계)
-- [ ] FormRequests 2개
-- [ ] API Resources (AttendanceResource, AttendanceListResource)
-- [ ] API 라우트 (`src/routes/api.php`) — 모든 라우트 `name()` 지정
+- [x] Models (AttendanceRecord, AttendanceStreak, AttendanceDailyRank)
+- [x] Repository 인터페이스 + 구현체
+- [x] Service Provider에서 Repository 인터페이스 바인딩
+- [x] `AttendanceService`: 출석 처리, 권한 확인, 시간 제한, 포인트 지급
+- [x] `AttendanceStreakService`: 달력 기준 개근 처리
+- [x] `AttendanceRankService`: 순위 계산 및 기록
+- [x] `AttendanceSettingsService` (ModuleSettingsInterface 구현)
+- [x] Custom Exceptions (다국어 메시지 사용)
+- [x] `AutoAttendanceListener` 구현
+- [x] 컨트롤러 3개 (Auth 출석, Admin 설정, Admin 통계)
+- [x] FormRequests 2개
+- [x] API Resources (AttendanceResource, AttendanceListResource)
+- [x] API 라우트 (`src/routes/api.php`) — 모든 라우트 `name()` 지정
 
 ### 4단계 — 프론트엔드
 
-- [ ] 유저 출석부 레이아웃 (`user_attendance_index.json`)
-- [ ] 관리자 설정 레이아웃 (`admin_attendance_settings.json`)
-- [ ] 관리자 스킨 관리 레이아웃 (`admin_attendance_skin.json`)
-- [ ] 유저 라우트 (`resources/routes/user.json`)
-- [ ] 관리자 라우트 (`resources/routes/admin.json`)
-- [ ] 프론트엔드 에셋 (`resources/js/index.ts`, 시각 타이머 핸들러)
-- [ ] Vite 빌드 설정 (`package.json`, `vite.config.ts`, `tsconfig.json`)
+- [x] 유저 출석부 레이아웃 (`user_attendance_index.json`)
+- [x] 관리자 설정 레이아웃 (`admin_attendance_settings.json`)
+- [x] 관리자 스킨 관리 레이아웃 (`admin_attendance_skin.json`)
+- [x] 유저 라우트 (`resources/routes/user.json`)
+- [x] 관리자 라우트 (`resources/routes/admin.json`)
+- [x] 프론트엔드 에셋 (`resources/js/index.ts`, 시각 타이머 핸들러)
+- [x] Vite 빌드 설정 (`package.json`, `vite.config.ts`, `tsconfig.json`)
 
 ### 5단계 — 테스트
 
-- [ ] 백엔드 Unit 테스트 전체 통과
-- [ ] 백엔드 Feature 테스트 전체 통과
-- [ ] 레이아웃 렌더링 테스트 전체 통과
+- [x] 백엔드 Unit 테스트 전체 통과
+- [x] 백엔드 Feature 테스트 전체 통과
+- [x] 레이아웃 렌더링 테스트 전체 통과
 
 ---
 
@@ -69,14 +69,14 @@
 
 각 레이아웃 JSON 파일에 대해 아래 항목을 모두 확인한다:
 
-- [ ] 레이아웃 구조가 `layout-json.md` 스키마와 일치하는가?
-- [ ] 사용할 컴포넌트가 `components.md`에 정의되어 있는가?
-- [ ] 컴포넌트 props가 `component-props.md`에 정의된 것만 사용하는가?
-- [ ] 사용할 핸들러가 `actions.md`에 정의되어 있는가?
-- [ ] 핸들러의 params 구조가 `actions-handlers.md`와 일치하는가?
-- [ ] 데이터 바인딩 문법이 `data-binding.md`에 정의된 형식인가?
-- [ ] 다크 모드 클래스가 `dark-mode.md` 규칙을 따르는가?
-- [ ] 기존 유사 레이아웃에서 동일 패턴이 사용되고 있는가?
+- [x] 레이아웃 구조가 `layout-json.md` 스키마와 일치하는가?
+- [x] 사용할 컴포넌트가 `components.md`에 정의되어 있는가?
+- [x] 컴포넌트 props가 `component-props.md`에 정의된 것만 사용하는가?
+- [x] 사용할 핸들러가 `actions.md`에 정의되어 있는가?
+- [x] 핸들러의 params 구조가 `actions-handlers.md`와 일치하는가?
+- [x] 데이터 바인딩 문법이 `data-binding.md`에 정의된 형식인가?
+- [x] 다크 모드 클래스가 `dark-mode.md` 규칙을 따르는가?
+- [x] 기존 유사 레이아웃에서 동일 패턴이 사용되고 있는가?
 
 ---
 
@@ -154,10 +154,10 @@ return [
 
 ## 6.7 단계 완료 체크리스트
 
-- [ ] 전체 구현 완료 체크리스트(6.1) 모두 완료
-- [ ] 레이아웃 작성 체크리스트(6.2) 모두 통과
-- [ ] 보안 검토(6.3) 완료
-- [ ] 성능 검토(6.4) 완료
-- [ ] 다국어 완성도 검토(6.5) 완료 (하드코딩 메시지 없음)
-- [ ] FORBIDDEN-PATTERNS.md의 금지 패턴이 코드에 없음 확인
-- [ ] 코드 리뷰 완료
+- [x] 전체 구현 완료 체크리스트(6.1) 모두 완료
+- [x] 레이아웃 작성 체크리스트(6.2) 모두 통과
+- [x] 보안 검토(6.3) 완료
+- [x] 성능 검토(6.4) 완료
+- [x] 다국어 완성도 검토(6.5) 완료 (하드코딩 메시지 없음)
+- [x] FORBIDDEN-PATTERNS.md의 금지 패턴이 코드에 없음 확인
+- [x] 코드 리뷰 완료

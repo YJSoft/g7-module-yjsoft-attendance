@@ -273,21 +273,21 @@ export default defineConfig({
 ## 5.7 단계 완료 체크리스트
 
 ### 백엔드 테스트
-- [ ] `StreakTypeTest` 작성 및 통과
-  - [ ] 월간 개근 달력 기준 정확한 계산 검증
-  - [ ] 월을 걸친 연속 출석은 개근 미달성 검증
-- [ ] `AttendanceServiceTest` 작성 및 통과
-  - [ ] 중복 출석 방지 검증
-  - [ ] 시간 제한 로직 검증
-- [ ] `AttendanceStreakServiceTest` 작성 및 통과
-- [ ] `AttendanceRankServiceTest` 작성 및 통과
-- [ ] `AttendanceControllerTest` 작성 및 통과
-  - [ ] 인증 없이 접근 시 401 반환 검증
-  - [ ] 권한 없이 접근 시 403 반환 검증
-- [ ] `AttendanceSettingsControllerTest` 작성 및 통과
-  - [ ] 비관리자 접근 시 403 반환 검증
+- [x] `StreakTypeTest` 작성 및 통과
+  - [x] 월간 개근 달력 기준 정확한 계산 검증
+  - [x] 월을 걸친 연속 출석은 개근 미달성 검증
+- [x] `AttendanceServiceTest` 작성 및 통과
+  - [x] 중복 출석 방지 검증
+  - [x] 시간 제한 로직 검증
+- [x] `AttendanceStreakServiceTest` 작성 및 통과
+- [x] `AttendanceRankServiceTest` 작성 및 통과
+- [x] `AttendanceControllerTest` 작성 및 통과
+  - [x] 인증 없이 접근 시 401 반환 검증
+  - [x] 권한 없이 접근 시 403 반환 검증
+- [x] `AttendanceSettingsControllerTest` 작성 및 통과
+  - [x] 비관리자 접근 시 403 반환 검증
 
 ### 프론트엔드/레이아웃 테스트
-- [ ] `vitest.config.ts` (모듈 독립) 작성
-- [ ] `user_attendance_index.test.tsx` 작성 및 통과
-- [ ] `admin_attendance_settings.test.tsx` 작성 및 통과
+- [x] `vitest.config.ts` (모듈 독립) 작성
+- [x] `user_attendance_index.test.tsx` 작성 및 통과
+- [x] `admin_attendance_settings.test.tsx` 작성 및 통과

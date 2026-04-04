@@ -4,7 +4,6 @@ namespace Modules\Yjsoft\Attendance\Http\Controllers\Api\Auth;
 
 use App\Helpers\ResponseHelper;
 use App\Http\Controllers\Api\Base\AuthBaseController;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Yjsoft\Attendance\Exceptions\AlreadyAttendedException;
@@ -13,17 +12,11 @@ use Modules\Yjsoft\Attendance\Http\Requests\StoreAttendanceRequest;
 use Modules\Yjsoft\Attendance\Http\Resources\AttendanceListResource;
 use Modules\Yjsoft\Attendance\Http\Resources\AttendanceResource;
 use Modules\Yjsoft\Attendance\Services\AttendanceService;
-use Modules\Yjsoft\Attendance\Services\AttendanceSettingsService;
-use Modules\Yjsoft\Attendance\Contracts\AttendanceRepositoryInterface;
-use Modules\Yjsoft\Attendance\Contracts\AttendanceStreakRepositoryInterface;
 
 class AttendanceController extends AuthBaseController
 {
     public function __construct(
-        private AttendanceService $attendanceService,
-        private AttendanceSettingsService $settingsService,
-        private AttendanceRepositoryInterface $attendanceRepository,
-        private AttendanceStreakRepositoryInterface $streakRepository
+        private AttendanceService $attendanceService
     ) {
         parent::__construct();
     }
@@ -66,29 +59,18 @@ class AttendanceController extends AuthBaseController
     public function status(Request $request): JsonResponse
     {
         $userId = $request->user()->id;
-        $today = Carbon::today();
 
-        $todayRecord = $this->attendanceRepository->findTodayByUser($userId);
-        $monthlyRecords = $this->attendanceRepository->getMonthlyRecords(
-            $userId,
-            $today->year,
-            $today->month
-        );
-        $totalCount = $this->attendanceRepository->getUserTotalCount($userId);
-        $todayRank = $this->attendanceRepository->getTodayRank($userId);
-        $streaks = $this->streakRepository->getUserStreaks($userId);
-
-        $frontendSettings = $this->settingsService->getFrontendSettings();
+        $status = $this->attendanceService->getStatus($userId);
 
         return ResponseHelper::success('messages.success', [
-            'is_attended_today' => $todayRecord !== null,
-            'today_record'      => $todayRecord ? new AttendanceResource($todayRecord) : null,
-            'monthly_records'   => $monthlyRecords->map(fn ($r) => [
+            'is_attended_today' => $status['is_attended_today'],
+            'today_record'      => $status['today_record'] ? new AttendanceResource($status['today_record']) : null,
+            'monthly_records'   => $status['monthly_records']->map(fn ($r) => [
                 'date'      => $r->attend_date->toDateString(),
                 'attended'  => true,
             ]),
-            'total_count'       => $totalCount,
-            'streaks'           => $streaks->map(fn ($s) => [
+            'total_count'       => $status['total_count'],
+            'streaks'           => $status['streaks']->map(fn ($s) => [
                 'type'           => $s->streak_type->value,
                 'label'          => $s->streak_type->label(),
                 'current_streak' => $s->current_streak,
@@ -96,8 +78,8 @@ class AttendanceController extends AuthBaseController
                 'period_start'   => $s->period_start->toDateString(),
                 'period_end'     => $s->period_end->toDateString(),
             ]),
-            'today_rank'        => $todayRank,
-            'settings'          => $frontendSettings,
+            'today_rank'        => $status['today_rank'],
+            'settings'          => $status['settings'],
         ]);
     }
 
@@ -108,7 +90,7 @@ class AttendanceController extends AuthBaseController
     {
         $perPage = (int) $request->input('per_page', 20);
 
-        $paginator = $this->attendanceRepository->getTodayList($perPage);
+        $paginator = $this->attendanceService->getTodayList($perPage);
 
         return ResponseHelper::success('messages.success', [
             'data' => AttendanceListResource::collection($paginator->items()),
@@ -128,11 +110,7 @@ class AttendanceController extends AuthBaseController
      */
     public function randomGreeting(): JsonResponse
     {
-        $greetings = $this->settingsService->getSetting('greetings.list', []);
-
-        $greeting = ! empty($greetings)
-            ? $greetings[array_rand($greetings)]
-            : '';
+        $greeting = $this->attendanceService->getRandomGreeting();
 
         return ResponseHelper::success('messages.success', [
             'greeting' => $greeting,
@@ -144,7 +122,7 @@ class AttendanceController extends AuthBaseController
      */
     public function publicSettings(): JsonResponse
     {
-        $settings = $this->settingsService->getFrontendSettings();
+        $settings = $this->attendanceService->getPublicSettings();
 
         return ResponseHelper::success('messages.success', $settings);
     }
