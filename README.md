@@ -41,7 +41,7 @@
 
 ## 설치
 
-1. 이 저장소를 `modules/_bundled/yjsoft-attendance` 또는 `modules/yjsoft-attendance` 경로에 배치합니다.
+1. 이 저장소를 그누보드7 프로젝트의 `modules/yjsoft-attendance` 경로에 배치합니다.
 2. 그누보드7 관리자 패널에서 모듈을 활성화합니다.
 3. 마이그레이션이 자동으로 실행됩니다.
 
@@ -105,7 +105,7 @@
 G7 코어 프로젝트 내에서 실행합니다:
 
 ```bash
-php vendor/bin/phpunit modules/_bundled/yjsoft-attendance/tests
+php vendor/bin/phpunit modules/yjsoft-attendance/tests
 ```
 
 ### 프론트엔드 (Vitest)

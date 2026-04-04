@@ -56,9 +56,9 @@ jobs:
 
       - name: Install module into G7
         run: |
-          # 모듈을 G7 코어의 _bundled 경로에 심링크
-          mkdir -p g7/modules/_bundled
-          ln -s "$GITHUB_WORKSPACE/module" g7/modules/_bundled/yjsoft-attendance
+          # 서드파티 모듈은 modules/ 하위에 설치 (_bundled/는 코어 번들 모듈 전용)
+          mkdir -p g7/modules
+          ln -s "$GITHUB_WORKSPACE/module" g7/modules/yjsoft-attendance
 
       - name: Register module autoload
         working-directory: g7
@@ -66,8 +66,8 @@ jobs:
           # composer.json에 모듈 PSR-4 네임스페이스 추가
           php -r "
             \$json = json_decode(file_get_contents('composer.json'), true);
-            \$json['autoload']['psr-4']['Modules\\\\Yjsoft\\\\Attendance\\\\'] = 'modules/_bundled/yjsoft-attendance/src/';
-            \$json['autoload-dev']['psr-4']['Modules\\\\Yjsoft\\\\Attendance\\\\Tests\\\\'] = 'modules/_bundled/yjsoft-attendance/tests/';
+            \$json['autoload']['psr-4']['Modules\\\\Yjsoft\\\\Attendance\\\\'] = 'modules/yjsoft-attendance/src/';
+            \$json['autoload-dev']['psr-4']['Modules\\\\Yjsoft\\\\Attendance\\\\Tests\\\\'] = 'modules/yjsoft-attendance/tests/';
             file_put_contents('composer.json', json_encode(\$json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
           "
           composer dump-autoload
@@ -94,7 +94,7 @@ jobs:
       - name: Run backend tests
         working-directory: g7
         run: |
-          php vendor/bin/phpunit modules/_bundled/yjsoft-attendance/tests \
+          php vendor/bin/phpunit modules/yjsoft-attendance/tests \
             --colors=always \
             --testdox
 
@@ -129,8 +129,8 @@ jobs:
 
       - name: Install module into G7
         run: |
-          mkdir -p g7/modules/_bundled
-          ln -s "$GITHUB_WORKSPACE/module" g7/modules/_bundled/yjsoft-attendance
+          mkdir -p g7/modules
+          ln -s "$GITHUB_WORKSPACE/module" g7/modules/yjsoft-attendance
 
       - name: Cache G7 core npm dependencies
         uses: actions/cache@v4
@@ -155,7 +155,7 @@ jobs:
         run: npm install
 
       - name: Run frontend tests
-        working-directory: g7/modules/_bundled/yjsoft-attendance
+        working-directory: g7/modules/yjsoft-attendance
         run: npx vitest run --reporter=verbose
 
   # ─────────────────────────────────────────────────────
