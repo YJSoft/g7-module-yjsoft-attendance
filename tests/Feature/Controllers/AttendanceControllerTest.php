@@ -79,7 +79,7 @@ class AttendanceControllerTest extends ModuleTestCase
     }
 
     /**
-     * yjsoft-attendance.attend permission 없는 사용자 → permission 미들웨어가 403 반환
+     * yjsoft-attendance.attendance.attend permission 없는 사용자 → permission 미들웨어가 403 반환
      */
     public function test_attend_not_allowed_returns_403(): void
     {
@@ -198,10 +198,10 @@ class AttendanceControllerTest extends ModuleTestCase
 
         // permission 미들웨어가 존재하는 경우 해당 권한 부여
         if (method_exists($user, 'givePermissionTo')) {
-            $user->givePermissionTo('yjsoft-attendance.attend');
+            $user->givePermissionTo('yjsoft-attendance.attendance.attend');
         } elseif (class_exists(\Spatie\Permission\Models\Permission::class)) {
             $permission = \Spatie\Permission\Models\Permission::firstOrCreate(
-                ['name' => 'yjsoft-attendance.attend'],
+                ['name' => 'yjsoft-attendance.attendance.attend'],
                 ['guard_name' => 'sanctum']
             );
             $user->givePermissionTo($permission);

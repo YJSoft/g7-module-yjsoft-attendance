@@ -10,34 +10,124 @@ class Module extends AbstractModule
     // 별도 오버라이드 불필요
 
     /**
-     * 권한 목록
+     * 모듈 권한 목록 반환 (계층형 구조, 다국어 지원)
      *
-     * - attend: 사용자 화면용 (type: user)
-     * - admin.*: 관리자 화면용 (type: admin)
+     * 구조: 모듈(1레벨) → 카테고리(2레벨) → 개별 권한(3레벨)
+     * identifier는 자동 생성됨: {module}.{category}.{action}
+     *
+     * - yjsoft-attendance.attendance.attend: 사용자 출석 권한 (type: user)
+     * - yjsoft-attendance.settings.read: 설정 조회 (type: admin)
+     * - yjsoft-attendance.settings.update: 설정 수정 (type: admin)
+     * - yjsoft-attendance.stats.read: 통계 조회 (type: admin)
+     *
+     * @return array<string, mixed>
      */
     public function getPermissions(): array
     {
         return [
-            [
-                'identifier'  => 'yjsoft-attendance.attend',
-                'name'        => ['ko' => '출석하기', 'en' => 'Check Attendance'],
-                'description' => ['ko' => '출석 기능을 사용할 수 있는 권한', 'en' => 'Permission to use attendance feature'],
-                'type'        => 'user',
-                'roles'       => ['user'],
+            'name' => [
+                'ko' => '출석부',
+                'en' => 'Attendance',
             ],
-            [
-                'identifier'  => 'yjsoft-attendance.admin.settings',
-                'name'        => ['ko' => '출석부 설정 관리', 'en' => 'Manage Attendance Settings'],
-                'description' => ['ko' => '출석부 설정을 변경할 수 있는 권한', 'en' => 'Permission to manage attendance settings'],
-                'type'        => 'admin',
-                'roles'       => ['admin'],
+            'description' => [
+                'ko' => '출석부 모듈 권한',
+                'en' => 'Attendance module permissions',
             ],
-            [
-                'identifier'  => 'yjsoft-attendance.admin.view',
-                'name'        => ['ko' => '출석 통계 조회', 'en' => 'View Attendance Stats'],
-                'description' => ['ko' => '출석 통계를 조회할 수 있는 권한', 'en' => 'Permission to view attendance statistics'],
-                'type'        => 'admin',
-                'roles'       => ['admin'],
+            'categories' => [
+                // 출석 권한 (type: user)
+                [
+                    'identifier' => 'attendance',
+                    'name' => [
+                        'ko' => '출석',
+                        'en' => 'Attendance',
+                    ],
+                    'description' => [
+                        'ko' => '출석 기능 권한',
+                        'en' => 'Attendance feature permissions',
+                    ],
+                    'permissions' => [
+                        [
+                            'action' => 'attend',
+                            'name' => [
+                                'ko' => '출석하기',
+                                'en' => 'Check Attendance',
+                            ],
+                            'description' => [
+                                'ko' => '출석 기능을 사용할 수 있는 권한',
+                                'en' => 'Permission to use attendance feature',
+                            ],
+                            'type' => 'user',
+                            'roles' => ['user'],
+                        ],
+                    ],
+                ],
+                // 설정 관리 권한 (type: admin)
+                [
+                    'identifier' => 'settings',
+                    'name' => [
+                        'ko' => '출석부 설정',
+                        'en' => 'Attendance Settings',
+                    ],
+                    'description' => [
+                        'ko' => '출석부 설정 관리 권한',
+                        'en' => 'Attendance settings management permissions',
+                    ],
+                    'permissions' => [
+                        [
+                            'action' => 'read',
+                            'name' => [
+                                'ko' => '설정 조회',
+                                'en' => 'View Settings',
+                            ],
+                            'description' => [
+                                'ko' => '출석부 설정을 조회할 수 있는 권한',
+                                'en' => 'Permission to view attendance settings',
+                            ],
+                            'type' => 'admin',
+                            'roles' => ['admin'],
+                        ],
+                        [
+                            'action' => 'update',
+                            'name' => [
+                                'ko' => '설정 수정',
+                                'en' => 'Update Settings',
+                            ],
+                            'description' => [
+                                'ko' => '출석부 설정을 변경할 수 있는 권한',
+                                'en' => 'Permission to manage attendance settings',
+                            ],
+                            'type' => 'admin',
+                            'roles' => ['admin'],
+                        ],
+                    ],
+                ],
+                // 통계 조회 권한 (type: admin)
+                [
+                    'identifier' => 'stats',
+                    'name' => [
+                        'ko' => '출석 통계',
+                        'en' => 'Attendance Statistics',
+                    ],
+                    'description' => [
+                        'ko' => '출석 통계 조회 권한',
+                        'en' => 'Attendance statistics permissions',
+                    ],
+                    'permissions' => [
+                        [
+                            'action' => 'read',
+                            'name' => [
+                                'ko' => '통계 조회',
+                                'en' => 'View Statistics',
+                            ],
+                            'description' => [
+                                'ko' => '출석 통계를 조회할 수 있는 권한',
+                                'en' => 'Permission to view attendance statistics',
+                            ],
+                            'type' => 'admin',
+                            'roles' => ['admin'],
+                        ],
+                    ],
+                ],
             ],
         ];
     }
@@ -67,7 +157,7 @@ class Module extends AbstractModule
                         'url'        => '/admin/attendance/settings',
                         'icon'       => 'fa-cog',
                         'order'      => 1,
-                        'permission' => 'yjsoft-attendance.admin.settings',
+                        'permission' => 'yjsoft-attendance.settings.read',
                     ],
                     [
                         'name' => [
@@ -78,7 +168,7 @@ class Module extends AbstractModule
                         'url'        => '/admin/attendance/skin',
                         'icon'       => 'fa-palette',
                         'order'      => 2,
-                        'permission' => 'yjsoft-attendance.admin.settings',
+                        'permission' => 'yjsoft-attendance.settings.read',
                     ],
                 ],
             ],
