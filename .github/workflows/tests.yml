@@ -82,14 +82,26 @@ jobs:
       - name: Configure SQLite
         working-directory: g7
         run: |
-          # .env에서 DB 설정을 SQLite로 변경
-          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
-          sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)"'/database/database.sqlite|' .env
-          # 불필요한 DB 설정 제거
-          sed -i '/^DB_HOST=/d' .env
-          sed -i '/^DB_PORT=/d' .env
-          sed -i '/^DB_USERNAME=/d' .env
-          sed -i '/^DB_PASSWORD=/d' .env
+          # .env.testing 생성 (G7 코어 bootstrap.php가 필수로 요구)
+          cp .env.testing.example .env.testing
+          # .env.testing에서 DB 설정을 SQLite로 변경
+          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env.testing
+          sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)"'/database/database.sqlite|' .env.testing
+          sed -i 's|^DB_WRITE_DATABASE=.*|DB_WRITE_DATABASE='"$(pwd)"'/database/database.sqlite|' .env.testing
+          sed -i 's|^DB_READ_DATABASE=.*|DB_READ_DATABASE='"$(pwd)"'/database/database.sqlite|' .env.testing
+          # 불필요한 DB 호스트/포트/인증 설정 제거
+          sed -i '/^DB_WRITE_HOST=/d' .env.testing
+          sed -i '/^DB_WRITE_PORT=/d' .env.testing
+          sed -i '/^DB_WRITE_USERNAME=/d' .env.testing
+          sed -i '/^DB_WRITE_PASSWORD=/d' .env.testing
+          sed -i '/^DB_READ_HOST=/d' .env.testing
+          sed -i '/^DB_READ_PORT=/d' .env.testing
+          sed -i '/^DB_READ_USERNAME=/d' .env.testing
+          sed -i '/^DB_READ_PASSWORD=/d' .env.testing
+          sed -i '/^DB_PREFIX=/d' .env.testing
+          # APP_KEY 설정
+          APP_KEY=$(grep '^APP_KEY=' .env | head -1)
+          sed -i "s/^APP_KEY=.*/$APP_KEY/" .env.testing
 
       - name: Run backend tests
         working-directory: g7
