@@ -1,0 +1,181 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # ─────────────────────────────────────────────────────
+  # Backend (PHPUnit) — G7 코어 위에서 모듈 테스트 실행
+  # ─────────────────────────────────────────────────────
+  backend:
+    name: Backend Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+
+    steps:
+      - name: Checkout module
+        uses: actions/checkout@v4
+        with:
+          path: module
+
+      - name: Checkout G7 core
+        uses: actions/checkout@v4
+        with:
+          repository: gnuboard/g7
+          path: g7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        working-directory: g7
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ matrix.php }}-${{ hashFiles('g7/composer.lock') }}
+          restore-keys: composer-${{ matrix.php }}-
+
+      - name: Install G7 core dependencies
+        working-directory: g7
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Install module into G7
+        run: |
+          # 모듈을 G7 코어의 _bundled 경로에 심링크
+          mkdir -p g7/modules/_bundled
+          ln -s "$GITHUB_WORKSPACE/module" g7/modules/_bundled/yjsoft-attendance
+
+      - name: Register module autoload
+        working-directory: g7
+        run: |
+          # composer.json에 모듈 PSR-4 네임스페이스 추가
+          php -r "
+            \$json = json_decode(file_get_contents('composer.json'), true);
+            \$json['autoload']['psr-4']['Modules\\\\Yjsoft\\\\Attendance\\\\'] = 'modules/_bundled/yjsoft-attendance/src/';
+            \$json['autoload-dev']['psr-4']['Modules\\\\Yjsoft\\\\Attendance\\\\Tests\\\\'] = 'modules/_bundled/yjsoft-attendance/tests/';
+            file_put_contents('composer.json', json_encode(\$json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+          "
+          composer dump-autoload
+
+      - name: Prepare environment
+        working-directory: g7
+        run: |
+          cp .env.example .env || true
+          php artisan key:generate --ansi
+          touch database/database.sqlite
+
+      - name: Configure SQLite
+        working-directory: g7
+        run: |
+          # .env에서 DB 설정을 SQLite로 변경
+          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)"'/database/database.sqlite|' .env
+          # 불필요한 DB 설정 제거
+          sed -i '/^DB_HOST=/d' .env
+          sed -i '/^DB_PORT=/d' .env
+          sed -i '/^DB_USERNAME=/d' .env
+          sed -i '/^DB_PASSWORD=/d' .env
+
+      - name: Run backend tests
+        working-directory: g7
+        run: |
+          php vendor/bin/phpunit modules/_bundled/yjsoft-attendance/tests \
+            --colors=always \
+            --testdox
+
+  # ─────────────────────────────────────────────────────
+  # Frontend (Vitest) — 모듈 레이아웃 렌더링 테스트
+  # ─────────────────────────────────────────────────────
+  frontend:
+    name: Frontend Tests (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']
+
+    steps:
+      - name: Checkout module
+        uses: actions/checkout@v4
+        with:
+          path: module
+
+      - name: Checkout G7 core
+        uses: actions/checkout@v4
+        with:
+          repository: gnuboard/g7
+          path: g7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install module into G7
+        run: |
+          mkdir -p g7/modules/_bundled
+          ln -s "$GITHUB_WORKSPACE/module" g7/modules/_bundled/yjsoft-attendance
+
+      - name: Cache G7 core npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: g7/node_modules
+          key: g7-npm-${{ matrix.node }}-${{ hashFiles('g7/package-lock.json') }}
+          restore-keys: g7-npm-${{ matrix.node }}-
+
+      - name: Install G7 core npm dependencies
+        working-directory: g7
+        run: npm ci
+
+      - name: Cache module npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: module/node_modules
+          key: module-npm-${{ matrix.node }}-${{ hashFiles('module/package.json') }}
+          restore-keys: module-npm-${{ matrix.node }}-
+
+      - name: Install module npm dependencies
+        working-directory: module
+        run: npm install
+
+      - name: Run frontend tests
+        working-directory: g7/modules/_bundled/yjsoft-attendance
+        run: npx vitest run --reporter=verbose
+
+  # ─────────────────────────────────────────────────────
+  # Frontend Build — Vite 빌드 검증
+  # ─────────────────────────────────────────────────────
+  build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout module
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
