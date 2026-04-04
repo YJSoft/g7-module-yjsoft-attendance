@@ -161,14 +161,18 @@ class AttendanceSettingsControllerTest extends ModuleTestCase
             $admin->update(['is_admin' => true]);
         }
 
-        // yjsoft-attendance.admin.settings permission 부여
+        // yjsoft-attendance.settings.read, settings.update permission 부여
         if (method_exists($admin, 'givePermissionTo')) {
             try {
-                $permission = \Spatie\Permission\Models\Permission::firstOrCreate(
-                    ['name' => 'yjsoft-attendance.admin.settings'],
+                $readPermission = \Spatie\Permission\Models\Permission::firstOrCreate(
+                    ['name' => 'yjsoft-attendance.settings.read'],
                     ['guard_name' => 'sanctum']
                 );
-                $admin->givePermissionTo($permission);
+                $updatePermission = \Spatie\Permission\Models\Permission::firstOrCreate(
+                    ['name' => 'yjsoft-attendance.settings.update'],
+                    ['guard_name' => 'sanctum']
+                );
+                $admin->givePermissionTo([$readPermission, $updatePermission]);
             } catch (\Exception $e) {
                 // 권한 시스템 미설정 시 무시
             }

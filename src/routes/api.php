@@ -21,7 +21,7 @@ Route::prefix('auth')
     ->middleware(['auth:sanctum'])
     ->group(function () {
         Route::post('/attend', [AttendanceController::class, 'attend'])
-            ->middleware('permission:yjsoft-attendance.attend')
+            ->middleware('permission:yjsoft-attendance.attendance.attend')
             ->name('auth.attend');
 
         Route::get('/status', [AttendanceController::class, 'status'])
@@ -42,14 +42,14 @@ Route::prefix('admin')
     ->middleware(['auth:sanctum', 'admin'])
     ->group(function () {
         Route::get('/settings', [AttendanceSettingsController::class, 'index'])
-            ->middleware('permission:yjsoft-attendance.admin.settings')
+            ->middleware('permission:yjsoft-attendance.settings.read')
             ->name('admin.settings.index');
 
         Route::put('/settings', [AttendanceSettingsController::class, 'update'])
-            ->middleware('permission:yjsoft-attendance.admin.settings')
+            ->middleware('permission:yjsoft-attendance.settings.update')
             ->name('admin.settings.update');
 
         Route::get('/stats', [AttendanceStatsController::class, 'index'])
-            ->middleware('permission:yjsoft-attendance.admin.view')
+            ->middleware('permission:yjsoft-attendance.stats.read')
             ->name('admin.stats.index');
     });
