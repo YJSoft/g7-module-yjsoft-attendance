@@ -1,4 +1,6 @@
 {
+  "identifier": "yjsoft-attendance",
+  "vendor": "yjsoft",
   "name": {
     "ko": "출석부",
     "en": "Attendance"
