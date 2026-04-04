@@ -99,9 +99,9 @@ jobs:
           sed -i '/^DB_READ_USERNAME=/d' .env.testing
           sed -i '/^DB_READ_PASSWORD=/d' .env.testing
           sed -i '/^DB_PREFIX=/d' .env.testing
-          # APP_KEY 설정
+          # APP_KEY 설정 (base64 키에 / 가 포함되므로 # 구분자 사용)
           APP_KEY=$(grep '^APP_KEY=' .env | head -1)
-          sed -i "s/^APP_KEY=.*/$APP_KEY/" .env.testing
+          sed -i "s#^APP_KEY=.*#$APP_KEY#" .env.testing
 
       - name: Run backend tests
         working-directory: g7

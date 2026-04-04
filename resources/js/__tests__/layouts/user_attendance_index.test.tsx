@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom';
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { createLayoutTest, screen } from '@core/template-engine/__tests__/utils/layoutTestUtils';
-import layoutJson from '../../layouts/user/user_attendance_index.json';
+import layoutJson from '../../../layouts/user/user_attendance_index.json';
 
 describe('user_attendance_index layout', () => {
     const testUtils = createLayoutTest(layoutJson, {
