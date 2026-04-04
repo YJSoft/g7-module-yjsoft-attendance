@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Modules\Yjsoft\Attendance\Enums\StreakType;
 
 return new class extends Migration
 {
@@ -16,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
             $table->string('streak_type')
-                ->comment('개근 타입: ' . implode(', ', StreakType::values()));
+                ->comment('개근 타입: weekly, monthly, yearly');
 
             // 개근 중인 기간의 시작/종료 날짜
             $table->date('period_start');   // 예: 2026-03-01 (월간)
