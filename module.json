@@ -11,7 +11,7 @@
   "g7_version": ">=1.0.0",
   "license": "MIT",
   "github_url": "https://github.com/YJSoft/g7-module-yjsoft-attendance",
-  "github_changelog_url": null,
+  "github_changelog_url": "https://github.com/YJSoft/g7-module-yjsoft-attendance/blob/main/CHANGELOG.md",
   "dependencies": {
     "modules": {},
     "plugins": {}
